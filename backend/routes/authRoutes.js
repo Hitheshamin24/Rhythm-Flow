@@ -193,7 +193,7 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    // ✅ Normal login when email is already verified
+    // Normal login when email is already verified
     const token = jwt.sign({ studioId: studio._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
@@ -360,7 +360,7 @@ router.post("/verify-email", async (req, res) => {
       return res.status(400).json({ message: "Invalid OTP" });
     }
 
-    // ✅ Mark email verified
+    // Mark email verified
     studio.emailVerified = true;
     studio.emailVerificationOtp = undefined;
     studio.emailVerificationOtpExpires = undefined;

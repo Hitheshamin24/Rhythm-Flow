@@ -1,4 +1,6 @@
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
+
 const protect = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -9,7 +11,7 @@ const protect = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.studioId=decoded.studioId
+    req.studioId = new mongoose.Types.ObjectId(decoded.studioId);
     next();
   } catch (e) {
     console.error("Auth error", e.message);

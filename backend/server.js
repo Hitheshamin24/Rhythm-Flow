@@ -30,6 +30,13 @@ app.use("/api/batches", require("./routes/batchRoutes"));
 app.use("/api/settings", require("./routes/settingsRoutes"));
 app.use("/api/studio", require("./routes/studioRoutes"));
 
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "OK",
+    message: "Server is running"
+  });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`server running on ${PORT}`);
