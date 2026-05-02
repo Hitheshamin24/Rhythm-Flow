@@ -48,18 +48,25 @@ RhythmFlow is built using the **MERN** stack:
 
 ```
 RhythmFlow/
- backend/ # Express.js + Node.js API server
- models/
- routes/
- controllers/
- server.js
- frontend/ # React.js client application
- src/
- components/
- pages/
- App.jsx
- package.json
- README.md
+├── backend/                  # Express.js + Node.js API server
+│   ├── config/               # Database and app configuration
+│   ├── middleware/           # Custom middleware (auth, error handling, etc.)
+│   ├── models/               # Mongoose schemas and models
+│   ├── routes/               # API route definitions
+│   ├── utils/                # Utility/helper functions
+│   ├── .env                  # Environment variables (not committed)
+│   ├── .gitignore
+│   ├── package.json
+│   └── server.js             # Entry point for the backend
+│
+└── frontend/                 # React.js + Vite client application
+    ├── public/               # Static assets
+    ├── src/                  # React source code
+    ├── index.html            # HTML entry point
+    ├── eslint.config.js
+    ├── vite.config.js        # Vite configuration
+    ├── vercel.json           # Vercel deployment config
+    └── package.json
 ```
 
 ---
