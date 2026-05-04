@@ -1,4 +1,4 @@
-# DNCR
+# RhythmFlow
 
 > **A centralized Dance Studio Management System** — built to help admins seamlessly manage students, track attendance, handle fee payments, and monitor financials all in one place.
 
@@ -12,7 +12,7 @@
 
 ## About the Project
 
-**DNCR** is a full-stack web application designed specifically for dance studio administrators. It eliminates the need for scattered spreadsheets and manual record-keeping by providing a single, efficient platform to:
+**RhythmFlow** is a full-stack web application designed specifically for dance studio administrators. It eliminates the need for scattered spreadsheets and manual record-keeping by providing a single, efficient platform to:
 
 - **Manage Student Data** — Add, update, and view student profiles with all relevant details
 - **Track Attendance** — Mark and monitor student attendance across classes and sessions
@@ -33,7 +33,7 @@ No installation required — just open the link in your browser and get started.
 
 ## Tech Stack
 
-DNCR is built using the **MERN** stack:
+RhythmFlow is built using the **MERN** stack:
 
 | Technology | Role |
 |------------|------|
@@ -47,7 +47,7 @@ DNCR is built using the **MERN** stack:
 ## Project Structure
 
 ```
-DNCR/
+RhythmFlow/
 ├── backend/                  # Express.js + Node.js API server
 │   ├── config/               # Database and app configuration
 │   ├── middleware/           # Custom middleware (auth, error handling, etc.)
@@ -73,7 +73,7 @@ DNCR/
 
 ## Running Locally
 
-Follow these steps to run DNCR on your local machine.
+Follow these steps to run RhythmFlow on your local machine.
 
 ### Prerequisites
 
@@ -89,8 +89,8 @@ Make sure you have the following installed:
 ### Step 1 — Clone the Repository
 
 ```bash
-git clone https://github.com/Hitheshamin24/DNCR.git
-cd DNCR
+git clone https://github.com/Hitheshamin24/RhythmFlow.git
+cd RhythmFlow
 ```
 
 ---
@@ -147,7 +147,7 @@ The frontend will run at **`http://localhost:5173`**
 
 ### Step 4 — Open in Browser
 
-Visit **[http://localhost:5173](http://localhost:5173)** in your browser to use DNCR locally.
+Visit **[http://localhost:5173](http://localhost:5173)** in your browser to use RhythmFlow locally.
 
 > Make sure both the **backend** and **frontend** servers are running simultaneously in separate terminals.
 
