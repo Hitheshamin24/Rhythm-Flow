@@ -152,8 +152,13 @@ const DashboardPage = () => {
   const upcomingClasses = useMemo(() => {
     if (!batches.length) return [];
 
+    const todayIndex = new Date().getDay();
+    const daysMap = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const todayStr = daysMap[todayIndex];
+
     return (
       batches
+        .filter((b) => b.days && b.days.includes(todayStr))
         .map((b) => {
           const count = students.filter(
             (s) => String(s.batch || "") === String(b._id)
@@ -245,8 +250,8 @@ const DashboardPage = () => {
             </button>
           </div>
 
-          <div className="h-72 w-full">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="w-full">
+            <ResponsiveContainer width="100%" height={288}>
               <BarChart data={weeklyAttendance} barGap={8}>
                 <XAxis 
                   dataKey="day" 
