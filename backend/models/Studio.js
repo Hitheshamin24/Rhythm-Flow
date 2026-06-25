@@ -29,7 +29,7 @@ const studioSchema = new mongoose.Schema(
       required: true,
     },
 
-    // 🔹 Forgot password flow
+    // Forgot password flow
     resetOtp: {
       type: String,
     },
@@ -37,7 +37,7 @@ const studioSchema = new mongoose.Schema(
       type: Date,
     },
 
-    // 🔹 Email verification flow (Register & Login)
+    // Email verification flow (Register & Login)
     emailVerified: {
       type: Boolean,
       default: false,
@@ -49,7 +49,7 @@ const studioSchema = new mongoose.Schema(
       type: Date,
     },
 
-    // 🔹 Profile update OTP flow (Settings Page)
+    // Profile update OTP flow (Settings Page)
     pendingEmail: {
       type: String,
       lowercase: true,
