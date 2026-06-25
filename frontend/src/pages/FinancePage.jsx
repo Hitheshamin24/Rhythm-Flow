@@ -77,7 +77,7 @@ const FinancePage = () => {
       const months = m.data.months || [];
       setMonthly(months);
 
-      // ✅ Default: last month = current month
+      // Default: last month = current month
       if (months.length > 0) {
         setSelectedMonth(months[months.length - 1]);
       }
@@ -317,7 +317,7 @@ const FinancePage = () => {
                       : "opacity-100 scale-100 blur-0"
                   }`}
                 >
-                  <ResponsiveContainer width="100%" height="100%">
+                  <ResponsiveContainer width="100%" height={320}>
                     <BarChart
                       data={chartDataMulti}
                       margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
