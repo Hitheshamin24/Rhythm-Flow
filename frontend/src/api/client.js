@@ -5,7 +5,7 @@ const API_BASE_URL =
 
 const client = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 60000, // ⏱ REQUIRED for Render cold start
+  timeout: 60000, // REQUIRED for Render cold start
   headers: {
     "Content-Type": "application/json",
   },
@@ -25,6 +25,12 @@ client.interceptors.request.use(
 client.interceptors.response.use(
   (response) => response,
   (error) => {
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("studio");
+      window.location.href = "/login";
+      return Promise.reject(error);
+    }
     if (error.code === "ECONNABORTED") {
       return Promise.reject(
         new Error("Server is taking too long. Please try again.")
