@@ -2,7 +2,7 @@
 
 > **A centralized Dance Studio Management System** — built to help admins seamlessly manage students, track attendance, handle fee payments, and monitor financials all in one place.
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-dncr.vercel.app-brightgreen?style=for-the-badge&logo=vercel)](https://dncr.vercel.app/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-rhflow.vercel.app-brightgreen?style=for-the-badge&logo=vercel)](https://rhflow.vercel.app//)
 [![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
@@ -25,7 +25,7 @@
 
 The application is live and accessible at:
 
- **[https://dncr.vercel.app/](https://dncr.vercel.app/)**
+ **[https://rhflow.vercel.app//](https://rhflow.vercel.app/)**
 
 No installation required — just open the link in your browser and get started.
 
