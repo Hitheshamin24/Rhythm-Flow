@@ -8,13 +8,17 @@ const caseInsensitive = (value) => ({ $regex: new RegExp(`^${value}$`, "i") });
 
 const register = async (req, res) => {
   try {
-    const { className, email, password, phone } = req.body;
+    let { className, email, password, phone } = req.body;
 
     if (!className || !password || !email || !phone) {
       return res.status(400).json({
         message: "className, email, phone and password are required",
       });
     }
+
+    className = className.trim();
+    email = email.trim();
+    phone = phone.trim();
 
     // Case-insensitive check
     let studio = await Studio.findOne({ className: caseInsensitive(className) });
@@ -98,10 +102,12 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { className, password } = req.body;
+    let { className, password } = req.body;
     if (!className || !password) {
       return res.status(400).json({ message: "ClassName and password are required" });
     }
+
+    className = className.trim();
 
     // Case-insensitive check
     const studio = await Studio.findOne({ className: caseInsensitive(className) });
