@@ -45,10 +45,10 @@ const AttendancePage = () => {
   // Batches
   const [batches, setBatches] = useState([]);
   const [selectedBatchId, setSelectedBatchId] = useState("");
-  // ✅ Selected batch object
+  // Selected batch object
   const selectedBatch = batches.find((b) => b._id === selectedBatchId);
 
-  // ✅ Allow only class days in calendar
+  // Allow only class days in calendar
   const isDateAllowed = (date) => {
     if (
       !selectedBatch ||
@@ -73,7 +73,7 @@ const AttendancePage = () => {
       setLoadingStudents(true);
       const res = await client.get("/students");
 
-      // ✅ Only ACTIVE students + ✅ SORT ascending by name
+      // Only ACTIVE students + SORT ascending by name
       const activeStudents = (res.data || [])
         .filter((s) => s.isActive)
         .sort((a, b) => a.name.localeCompare(b.name));
@@ -319,8 +319,8 @@ const loadAttendance = async (dateObj = selectedDate, batchId = selectedBatchId)
               dateFormat="EEE, MMM d, yyyy"
               customInput={<CustomDateInput />}
               popperPlacement="bottom-end"
-              filterDate={(date) => isDateAllowed(date)} // ✅ only allow class days
-              disabled={!selectedBatchId} // ✅ disabled until batch selected
+              filterDate={(date) => isDateAllowed(date)} // only allow class days
+              disabled={!selectedBatchId} // disabled until batch selected
             />
           </div>
         </div>

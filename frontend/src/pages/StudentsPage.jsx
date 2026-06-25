@@ -40,7 +40,7 @@ const StudentsPage = () => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [togglingId, setTogglingId] = useState(null);
 
-  // 🔹 NEW: global batch selection + checklist state
+  // NEW: global batch selection + checklist state
   const [selectedBatch, setSelectedBatch] = useState("");
   const [selectedIds, setSelectedIds] = useState([]); // student ids
   const [updatingBatch, setUpdatingBatch] = useState(false);
@@ -144,7 +144,7 @@ const StudentsPage = () => {
         batch: form.batch || undefined,
       });
 
-      // ✅ SAFE RESET WITHOUT res
+      // SAFE RESET WITHOUT res
       setForm((prev) => ({
         name: "",
         parentName: "",
@@ -512,7 +512,7 @@ const StudentsPage = () => {
 
           {!loading && sortedStudents.length > 0 && (
             <>
-              {/* 📱 MOBILE VIEW: CARDS (Visible on small screens) */}
+              {/* MOBILE VIEW: CARDS (Visible on small screens) */}
               <div className="block md:hidden p-4 space-y-3 bg-slate-50/50">
                 {sortedStudents.map((s) => {
                    const checked = selectedIds.includes(s._id);
@@ -589,7 +589,7 @@ const StudentsPage = () => {
                 })}
               </div>
 
-              {/* 💻 DESKTOP VIEW: TABLE (Hidden on mobile) */}
+              {/* DESKTOP VIEW: TABLE (Hidden on mobile) */}
               <div className="hidden md:block overflow-x-auto custom-scrollbar">
                 <table className="min-w-full text-sm">
                   <thead className="bg-slate-50/80 text-slate-400 font-bold text-xs uppercase tracking-wider border-b border-slate-100 backdrop-blur-sm sticky top-0 z-10">

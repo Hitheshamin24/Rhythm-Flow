@@ -5,7 +5,7 @@ import {
   markUnpaid,
   resetAllToUnpaid,
 } from "../api/payments";
-import client from "../api/client"; // 🔹 NEW: to fetch batches
+import client from "../api/client"; // NEW: to fetch batches
 import {
   CreditCard,
   RefreshCw,
@@ -40,7 +40,7 @@ const PaymentsPage = () => {
   const [resetting, setResetting] = useState(false);
   const [toggleConfirm, setToggleConfirm] = useState(false);
 
-  // 🔹 Batches + selected batch filter
+  // Batches + selected batch filter
   const [batches, setBatches] = useState([]);
   const [selectedBatchId, setSelectedBatchId] = useState(""); // "" = all batches
 
@@ -85,7 +85,7 @@ const PaymentsPage = () => {
     try {
       setLoading(true);
       setError("");
-      const res = await getPayments(); // 🔹 stays same: studio-wide payments
+      const res = await getPayments(); // stays same: studio-wide payments
       setPayments(res.data);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to load payments.");
@@ -173,7 +173,7 @@ const PaymentsPage = () => {
             </div>
           </div>
 
-          {/* 🔹 Batch filter dropdown */}
+          {/* Batch filter dropdown */}
           <select
             value={selectedBatchId}
             onChange={(e) => setSelectedBatchId(e.target.value)}

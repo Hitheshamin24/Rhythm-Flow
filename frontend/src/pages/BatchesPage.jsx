@@ -28,7 +28,7 @@ const BatchesPage = () => {
   const [editMode, setEditMode] = useState(false); // create vs edit
   const [currentBatch, setCurrentBatch] = useState(null);
 
-  // 🔹 now includes days: []
+  // now includes days: []
   const [form, setForm] = useState({ name: "", timing: "", days: [] });
   const [error, setError] = useState("");
 

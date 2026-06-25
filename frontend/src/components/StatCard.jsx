@@ -6,7 +6,7 @@ const StatCard = ({
   icon,
   subtext,
   trend = "neutral",
-  chart, // 👈 NEW PROP
+  chart, // NEW PROP
 }) => {
   return (
     <div className="group relative overflow-hidden bg-linear-to-br from-[#2A181D] to-[#1F1216] border border-pink-500/10 rounded-3xl p-5 hover:border-pink-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-rose-900/20 hover:-translate-y-1">
@@ -30,7 +30,7 @@ const StatCard = ({
         </div>
       </div>
 
-      {/* 👇 GRAPH SECTION */}
+      {/* GRAPH SECTION */}
       {chart && (
         <div className="relative mt-4 h-20">
           {chart}
