@@ -28,7 +28,7 @@ client.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       localStorage.removeItem("token");
       localStorage.removeItem("studio");
-      window.location.href = "/login";
+      window.location.href = "/auth";
       return Promise.reject(error);
     }
     if (error.code === "ECONNABORTED") {
