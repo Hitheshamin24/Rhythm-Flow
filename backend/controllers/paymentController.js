@@ -80,11 +80,25 @@ const markAsUnpaid = async (req, res) => {
     }
 
     student.isPaid = false;
-    student.lastPaidDate = null;
+
+    // Only clear lastPaidDate if it falls within the current month.
+    // This preserves historical lastPaidDate for previous months so the
+    // finance fallback (getMonthly) doesn't lose past income data.
+    const forMonth = getCurrentMonthStart();
+    const nextMonth = new Date(
+      Date.UTC(forMonth.getUTCFullYear(), forMonth.getUTCMonth() + 1, 1)
+    );
+    if (
+      student.lastPaidDate &&
+      student.lastPaidDate >= forMonth &&
+      student.lastPaidDate < nextMonth
+    ) {
+      student.lastPaidDate = null;
+    }
+
     await student.save();
 
-    // Remove the Payment record for the current month
-    const forMonth = getCurrentMonthStart();
+    // Remove the Payment record for the current month only
     await Payment.deleteOne({
       studio: req.studioId,
       student: student._id,

@@ -7,25 +7,47 @@ const getSummary = async (req, res) => {
   try {
     const studioId = req.studioId;
 
-    // students
+    // ── Expected income: sum of all active students' monthly fees ──
     const students = await Student.find({ studio: studioId, isActive: true });
-
     const totalExpected = students.reduce(
       (sum, s) => sum + (s.monthlyFee || 0),
       0
     );
-    const totalCollected = students
-      .filter((s) => s.isPaid)
-      .reduce((sum, s) => sum + (s.monthlyFee || 0), 0);
 
-    const pending = totalExpected - totalCollected;
-
-    // expenses
+    // ── Collected: sum from Payment records for the current month ──
+    // Using Payment records (same source as the bar chart) keeps the
+    // summary cards consistent and prevents isPaid-flag drift.
     const now = new Date();
-    const startOfMonth = new Date(
+    const currentMonthStart = new Date(
       Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)
     );
+    const nextMonthStart = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1)
+    );
 
+    const currentMonthPayments = await Payment.find({
+      studio: studioId,
+      forMonth: { $gte: currentMonthStart, $lt: nextMonthStart },
+    });
+    const totalCollected = currentMonthPayments.reduce(
+      (sum, p) => sum + (p.amount || 0),
+      0
+    );
+
+    // ── Fallback: if no Payment records exist yet use isPaid flag ──
+    // (for studios that haven't generated any Payment records yet)
+    let effectiveCollected = totalCollected;
+    const hasAnyPaymentRecords = await Payment.exists({ studio: studioId });
+    if (!hasAnyPaymentRecords) {
+      effectiveCollected = students
+        .filter((s) => s.isPaid)
+        .reduce((sum, s) => sum + (s.monthlyFee || 0), 0);
+    }
+
+    const pending = totalExpected - effectiveCollected;
+
+    // ── Expenses: current month only ──
+    const startOfMonth = currentMonthStart;
     const expenses = await Expense.find({
       studio: studioId,
       createdAt: { $gte: startOfMonth },
@@ -34,12 +56,11 @@ const getSummary = async (req, res) => {
       .limit(20);
 
     const totalExpenses = expenses.reduce((sum, e) => sum + (e.amount || 0), 0);
-
-    const profit = totalCollected - totalExpenses;
+    const profit = effectiveCollected - totalExpenses;
 
     res.json({
       totalExpected,
-      totalCollected,
+      totalCollected: effectiveCollected,
       pending,
       totalExpenses,
       profit,
