@@ -3,8 +3,6 @@ import { useState, useEffect } from "react";
 import { Menu, X,Layers, ChevronLeft, ChevronRight, LogOut, Home, Users, Calendar, CreditCard, TrendingUp, Settings } from "lucide-react";
 import image from "../assets/danceapp.png"
 
-// Note: I swapped emojis for Lucide-React icons for a more professional responsive look. 
-// If you don't use lucide-react, you can swap them back to emojis.
 const navItems = [
   { label: "Dashboard", path: "/dashboard", icon: <Home size={20} /> },
   { label: "Students", path: "/dashboard/students", icon: <Users size={20} /> },
