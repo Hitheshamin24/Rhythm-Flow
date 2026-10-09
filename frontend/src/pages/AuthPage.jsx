@@ -326,7 +326,7 @@ const AuthPage = () => {
     userType === "trainer" && registeredEmail === "pending" && !error;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-[#1F1216] overflow-hidden px-4 font-sans selection:bg-rose-500/30">
+    <div className="grid place-items-center min-h-[100dvh] w-full bg-[#1F1216] relative overflow-x-hidden px-4 py-8 font-sans selection:bg-rose-500/30">
       {/* Background Ambience */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-rose-600/15 rounded-full blur-[120px]" />
@@ -334,7 +334,7 @@ const AuthPage = () => {
       </div>
 
       {/* Main Card */}
-      <div className="relative z-10 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-black/40 max-w-[420px] w-full p-6 md:p-10 border border-white/40 ring-1 ring-white/50 max-h-[92dvh] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <div className="relative z-10 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-black/40 max-w-[420px] w-full p-6 md:p-10 border border-white/40 ring-1 ring-white/50">
         {/* Header */}
         <div className="flex flex-col items-center text-center space-y-4 mb-6">
           <div className="h-16 w-16 rounded-2xl bg-linear-to-br from-[#29171c] to-[#3d1f28] flex items-center justify-center text-white p-3 shadow-lg shadow-rose-900/20 transform hover:rotate-3 transition-transform duration-300">
@@ -579,7 +579,7 @@ const AuthPage = () => {
         </form>
       </div>
 
-      <div className="absolute bottom-3 text-white/30 text-xs font-medium tracking-wide">
+      <div className="text-white/30 text-xs font-medium tracking-wide mt-8 pb-4">
         © 2025 DNCR. All rights reserved.
       </div>
 
