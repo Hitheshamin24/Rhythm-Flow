@@ -1,6 +1,7 @@
 // backend/routes/financeRoutes.js
 const express = require("express");
 const protect = require("../middleware/authMiddleware");
+const { ownerOnly } = require("../middleware/authMiddleware");
 const {
   getSummary,
   addExpense,
@@ -9,7 +10,8 @@ const {
 } = require("../controllers/financeController");
 
 const router = express.Router();
-router.use(protect);
+// Finance is restricted to Studio Owners – trainers cannot access this
+router.use(protect, ownerOnly);
 
 // GET Finance Summary
 router.get("/summary", getSummary);

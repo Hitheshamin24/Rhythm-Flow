@@ -9,6 +9,7 @@ import PaymentsPage from "../pages/PaymentsPage";
 import FinancePage from "../pages/FinancePage";
 import BatchesPage from "../pages/BatchesPage";
 import SettingsPage from "../pages/SettingPage";
+import TrainerApprovalsPage from "../pages/TrainerApprovalsPage";
 
 // Layouts
 import AuthLayout from "../layouts/AuthLayout";
@@ -46,9 +47,34 @@ const AppRoutes = () => {
                 <Route path="students" element={<StudentsPage />} />
                 <Route path="attendance" element={<AttendancePage />} />
                 <Route path="payments" element={<PaymentsPage />} />
-                <Route path="finances" element={<FinancePage />} />
                 <Route path="batches" element={<BatchesPage />} />
-                <Route path="settings" element={<SettingsPage />} />
+
+                {/* Owner-only routes – trainers are redirected away */}
+                <Route
+                  path="finances"
+                  element={
+                    <ProtectedRoute ownerOnly>
+                      <FinancePage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="settings"
+                  element={
+                    <ProtectedRoute ownerOnly>
+                      <SettingsPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="trainer-approvals"
+                  element={
+                    <ProtectedRoute ownerOnly>
+                      <TrainerApprovalsPage />
+                    </ProtectedRoute>
+                  }
+                />
+
                 <Route path="*" element={<Navigate to="/dashboard" replace />} />
               </Routes>
             </DashBoardLayout>

@@ -1,28 +1,51 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { Menu, X,Layers, ChevronLeft, ChevronRight, LogOut, Home, Users, Calendar, CreditCard, TrendingUp, Settings } from "lucide-react";
-import image from "../assets/danceapp.png"
+import { useState } from "react";
+import {
+  Menu,
+  X,
+  Layers,
+  ChevronLeft,
+  ChevronRight,
+  LogOut,
+  Home,
+  Users,
+  Calendar,
+  CreditCard,
+  TrendingUp,
+  Settings,
+  UserCheck,
+} from "lucide-react";
+import image from "../assets/danceapp.png";
 
-const navItems = [
+// Full nav items – owners see everything
+const ownerNavItems = [
   { label: "Dashboard", path: "/dashboard", icon: <Home size={20} /> },
   { label: "Students", path: "/dashboard/students", icon: <Users size={20} /> },
   { label: "Batches", path: "/dashboard/batches", icon: <Layers size={20} /> },
   { label: "Attendance", path: "/dashboard/attendance", icon: <Calendar size={20} /> },
   { label: "Payments", path: "/dashboard/payments", icon: <CreditCard size={20} /> },
   { label: "Finances", path: "/dashboard/finances", icon: <TrendingUp size={20} /> },
+  { label: "Approvals", path: "/dashboard/trainer-approvals", icon: <UserCheck size={20} /> },
   { label: "Settings", path: "/dashboard/settings", icon: <Settings size={20} /> },
+];
+
+// Trainer nav items – Finance and Settings are completely hidden
+const trainerNavItems = [
+  { label: "Dashboard", path: "/dashboard", icon: <Home size={20} /> },
+  { label: "Students", path: "/dashboard/students", icon: <Users size={20} /> },
+  { label: "Attendance", path: "/dashboard/attendance", icon: <Calendar size={20} /> },
+  { label: "Payments", path: "/dashboard/payments", icon: <CreditCard size={20} /> },
 ];
 
 const Sidebar = () => {
   const navigate = useNavigate();
-  // Desktop collapse state
   const [collapsed, setCollapsed] = useState(false);
-  // Mobile open/close state
   const [mobileOpen, setMobileOpen] = useState(false);
-  
-  const studioName = localStorage.getItem("studioName") || "DanceFlow";
 
-  // Close mobile menu when clicking a link
+  const studioName = localStorage.getItem("studioName") || "DanceFlow";
+  const role = localStorage.getItem("role") || "owner";
+  const navItems = role === "trainer" ? trainerNavItems : ownerNavItems;
+
   const handleLinkClick = () => {
     setMobileOpen(false);
   };
@@ -30,12 +53,13 @@ const Sidebar = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("studioName");
+    localStorage.removeItem("role");
     navigate("/auth");
   };
 
   return (
     <>
-      {/* --- Mobile Trigger Button (Visible only on mobile) --- */}
+      {/* --- Mobile Trigger Button --- */}
       <button
         onClick={() => setMobileOpen(true)}
         className="fixed top-4 left-4 z-40 p-2 bg-[#1F1216] text-rose-500 rounded-lg shadow-lg border border-white/10 md:hidden"
@@ -43,9 +67,9 @@ const Sidebar = () => {
         <Menu size={24} />
       </button>
 
-      {/* --- Mobile Overlay (Backdrop) --- */}
+      {/* --- Mobile Overlay --- */}
       {mobileOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
           onClick={() => setMobileOpen(false)}
         />
@@ -56,16 +80,13 @@ const Sidebar = () => {
         className={`
           fixed top-0 left-0 z-50 h-screen bg-[#1F1216] border-r border-white/5 text-pink-50 flex flex-col 
           transition-all duration-300 ease-in-out
-          ${/* Mobile: Slide in/out logic */ ""}
           ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
-          
-          ${/* Desktop: Always visible, handle width logic */ ""}
           md:relative md:translate-x-0 
           ${collapsed ? "md:w-20" : "md:w-64"}
           w-64
         `}
       >
-        {/* --- Desktop Toggle Button (Hidden on Mobile) --- */}
+        {/* --- Desktop Toggle Button --- */}
         <button
           onClick={() => setCollapsed(!collapsed)}
           className="hidden md:flex absolute -right-3 top-9 z-50 bg-rose-600 hover:bg-rose-500 text-white p-1 rounded-full shadow-lg border-2 border-[#1F1216] transition-transform hover:scale-110 items-center justify-center"
@@ -74,7 +95,7 @@ const Sidebar = () => {
         </button>
 
         {/* --- Mobile Close Button --- */}
-        <button 
+        <button
           onClick={() => setMobileOpen(false)}
           className="md:hidden absolute right-4 top-4 text-pink-200/60 hover:text-white"
         >
@@ -84,14 +105,19 @@ const Sidebar = () => {
         {/* --- Logo Area --- */}
         <div className={`flex items-center gap-4 px-6 py-6 ${collapsed ? "md:justify-center" : ""}`}>
           <div className="h-10 w-10 min-w-10 rounded-xl bg-gradient-to from-rose-500 to-pink-600 flex items-center justify-center text-xl shadow-lg shadow-rose-900/20">
-           <img src={image} alt="" />
+            <img src={image} alt="" />
           </div>
-          
-          <div className={`flex flex-col overflow-hidden transition-all duration-300 
-            ${collapsed ? "md:w-0 md:opacity-0" : "w-auto opacity-100"}`}>
+
+          <div
+            className={`flex flex-col overflow-hidden transition-all duration-300 
+              ${collapsed ? "md:w-0 md:opacity-0" : "w-auto opacity-100"}`}
+          >
             <span className="text-lg font-bold tracking-wider text-white"> D N C R</span>
             <span className="text-[10px] uppercase tracking-wider text-pink-200/60 truncate">
               {studioName}
+              {role === "trainer" && (
+                <span className="ml-1 text-rose-400/80">· Trainer</span>
+              )}
             </span>
           </div>
         </div>
@@ -102,7 +128,7 @@ const Sidebar = () => {
             <NavLink
               key={item.path}
               to={item.path}
-              onClick={handleLinkClick} // Auto-close on mobile
+              onClick={handleLinkClick}
               end={item.path === "/dashboard"}
               className={({ isActive }) =>
                 `relative flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 group ${
@@ -118,7 +144,9 @@ const Sidebar = () => {
                     <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-r-full bg-rose-500" />
                   )}
 
-                  <span className={`transition-transform duration-200 ${isActive ? "scale-110" : "group-hover:scale-110"} ${collapsed ? "md:mx-auto" : ""}`}>
+                  <span
+                    className={`transition-transform duration-200 ${isActive ? "scale-110" : "group-hover:scale-110"} ${collapsed ? "md:mx-auto" : ""}`}
+                  >
                     {item.icon}
                   </span>
 
@@ -134,12 +162,14 @@ const Sidebar = () => {
           ))}
         </nav>
 
-        {/* --- Footer / User --- */}
+        {/* --- Footer / Logout --- */}
         <div className="p-4 border-t border-white/5">
           <button
             onClick={handleLogout}
             className={`flex items-center gap-3 w-full rounded-xl transition-colors duration-200 group ${
-               collapsed ? "md:justify-center md:px-0 py-3 bg-white/5 hover:bg-rose-500/20" : "px-4 py-3 bg-white/5 hover:bg-rose-500 text-pink-200 hover:text-white"
+              collapsed
+                ? "md:justify-center md:px-0 py-3 bg-white/5 hover:bg-rose-500/20"
+                : "px-4 py-3 bg-white/5 hover:bg-rose-500 text-pink-200 hover:text-white"
             }`}
           >
             <LogOut size={20} />

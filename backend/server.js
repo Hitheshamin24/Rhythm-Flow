@@ -29,6 +29,7 @@ app.use("/api/finance", require("./routes/financeRoutes"));
 app.use("/api/batches", require("./routes/batchRoutes"));
 app.use("/api/settings", require("./routes/settingsRoutes"));
 app.use("/api/studio", require("./routes/studioRoutes"));
+app.use("/api/studios", require("./routes/studiosRoutes"));
 
 app.get("/health", (req, res) => {
   res.status(200).json({

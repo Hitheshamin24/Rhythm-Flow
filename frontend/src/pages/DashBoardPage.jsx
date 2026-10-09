@@ -24,6 +24,7 @@ import {
 } from "recharts";
 
 const DashboardPage = () => {
+  const role = localStorage.getItem("role") || "owner";
   const [students, setStudents] = useState([]);
   const [batches, setBatches] = useState([]);
   const [payments, setPayments] = useState({
@@ -206,15 +207,17 @@ const DashboardPage = () => {
           trend={activeStudents >= totalStudents / 2 ? "up" : "down"}
           iconBg="bg-rose-50"
         />
-        {/* Revenue: Amber/Gold Theme (Matches image) */}
-        <StatCard
-          label="Monthly Revenue"
-          value={`₹${monthlyRevenue.toLocaleString("en-IN")}`}
-          icon={<Banknote size={22} className="text-amber-600" />}
-          subtext={`${payments.paidCount || 0} paid / ${payments.total || 0} students`}
-          trend="up"
-          iconBg="bg-amber-50"
-        />
+        {/* Revenue: Amber/Gold Theme – Owner only */}
+        {role === "owner" && (
+          <StatCard
+            label="Monthly Revenue"
+            value={`₹${monthlyRevenue.toLocaleString("en-IN")}`}
+            icon={<Banknote size={22} className="text-amber-600" />}
+            subtext={`${payments.paidCount || 0} paid / ${payments.total || 0} students`}
+            trend="up"
+            iconBg="bg-amber-50"
+          />
+        )}
         {/* Classes: Stone/Neutral Theme */}
         <StatCard
           label="Classes Today"

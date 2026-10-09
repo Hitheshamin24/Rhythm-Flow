@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   login,
@@ -6,14 +6,35 @@ import {
   requestPasswordOtp,
   resetPasswordWithOtp,
   verifyEmailOtp,
+  staffLogin,
+  staffRegister,
+  getStudiosList,
 } from "../api/auth";
 
-import { User, Mail, Lock, Loader2, ArrowRight, X, Phone } from "lucide-react";
+import {
+  User,
+  Mail,
+  Lock,
+  Loader2,
+  ArrowRight,
+  X,
+  Phone,
+  ChevronDown,
+  Building2,
+  UserCog,
+} from "lucide-react";
 import image from "../assets/danceapp.png";
 
 const AuthPage = () => {
+  // "owner" | "trainer"
+  const [userType, setUserType] = useState("owner");
+  // "login" | "register"
   const [mode, setMode] = useState("login");
+
+  // Owner form fields
   const [className, setClassName] = useState("");
+
+  // Shared fields
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
@@ -21,18 +42,19 @@ const AuthPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Trainer-specific fields
+  const [trainerName, setTrainerName] = useState("");
+  const [selectedStudioId, setSelectedStudioId] = useState("");
+  const [studios, setStudios] = useState([]);
+  const [studiosLoading, setStudiosLoading] = useState(false);
+
   // --- Forgot Password State ---
   const [showForgotModal, setShowForgotModal] = useState(false);
   const [fpStep, setFpStep] = useState("request"); // "request" | "verify"
-
-  // We use this single state for the input box
   const [fpInput, setFpInput] = useState("");
-
-  // These store the PARSED values to send to backend (hidden from UI)
   const [fpClassName, setFpClassName] = useState("");
   const [fpEmail, setFpEmail] = useState("");
   const [fpPhone, setFpPhone] = useState("");
-
   const [fpOtp, setFpOtp] = useState(new Array(6).fill(""));
   const [fpNewPassword, setFpNewPassword] = useState("");
   const [fpConfirmPassword, setFpConfirmPassword] = useState("");
@@ -40,7 +62,7 @@ const AuthPage = () => {
   const [fpMessage, setFpMessage] = useState("");
   const [fpError, setFpError] = useState("");
 
-  // --- Verify Email State ---
+  // --- Verify Email State (Owner only) ---
   const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [verifyOtp, setVerifyOtp] = useState(new Array(6).fill(""));
   const [verifyLoading, setVerifyLoading] = useState(false);
@@ -53,7 +75,29 @@ const AuthPage = () => {
 
   const navigate = useNavigate();
 
-  // --- OTP Helper Functions (Focus & Paste) ---
+  // Fetch studios list when trainer registration is active
+  useEffect(() => {
+    if (userType === "trainer" && mode === "register") {
+      setStudiosLoading(true);
+      getStudiosList()
+        .then((res) => setStudios(res.data || []))
+        .catch(() => setStudios([]))
+        .finally(() => setStudiosLoading(false));
+    }
+  }, [userType, mode]);
+
+  // Reset form when userType or mode changes
+  useEffect(() => {
+    setError("");
+    setEmail("");
+    setPassword("");
+    setClassName("");
+    setPhone("");
+    setTrainerName("");
+    setSelectedStudioId("");
+  }, [userType, mode]);
+
+  // --- OTP Helper Functions ---
   const handleOtpChange = (element, index, setOtpState) => {
     if (isNaN(element.value)) return false;
     setOtpState((prevOtp) => {
@@ -96,40 +140,61 @@ const AuthPage = () => {
     }
   };
 
-  // --- Handlers ---
-
+  // --- Main Form Submit ---
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
-      if (mode === "login") {
-        const response = await login(className, password);
-        const data = response.data;
+      if (userType === "owner") {
+        // Studio Owner flow
+        if (mode === "login") {
+          const response = await login(className, password);
+          const data = response.data;
 
-        if (data.requiresVerification) {
+          if (data.requiresVerification) {
+            setRegisteredClassName(className);
+            setRegisteredEmail(data.studio?.email || "");
+            setError("");
+            setShowVerifyModal(true);
+            return;
+          }
+
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("studioName", data.studio.className);
+          localStorage.setItem("role", "owner");
+          navigate("/dashboard");
+        } else {
+          await registerStudio(className, email, password, phone);
           setRegisteredClassName(className);
-          setRegisteredEmail(data.studio?.email || "");
+          setRegisteredEmail(email);
           setError("");
           setShowVerifyModal(true);
-          return;
         }
-
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("studioName", data.studio.className);
-        navigate("/dashboard");
       } else {
-        const response = await registerStudio(
-          className,
-          email,
-          password,
-          phone
-        );
-        setRegisteredClassName(className);
-        setRegisteredEmail(email);
-        setError("");
-        setShowVerifyModal(true);
+        // Trainer flow
+        if (mode === "login") {
+          const response = await staffLogin(email, password);
+          const data = response.data;
+
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("studioName", data.staff.name);
+          localStorage.setItem("role", "trainer");
+          navigate("/dashboard");
+        } else {
+          if (!selectedStudioId) {
+            setError("Please select the studio you belong to.");
+            return;
+          }
+          await staffRegister(trainerName, email, password, selectedStudioId);
+          setError("");
+          // Show a success message instead of navigating
+          setMode("login");
+          setError(""); // Reuse error field as info — or use a dedicated state
+          // We'll show a toast-like message via error field (green style handled below)
+          setRegisteredEmail("pending");
+        }
       }
     } catch (err) {
       const msg = err.response?.data?.message || "Something went wrong.";
@@ -139,11 +204,10 @@ const AuthPage = () => {
     }
   };
 
-  // Logic to determine what the user typed in the single box
+  // --- Forgot Password ---
   const detectInputType = (input) => {
     const value = input.trim();
     if (value.includes("@")) return "email";
-    // If purely digits and longer than 6 chars, assume phone
     if (/^\d+$/.test(value) && value.length > 6) return "phone";
     return "className";
   };
@@ -164,13 +228,9 @@ const AuthPage = () => {
           return;
         }
 
-        // 1. Detect what was entered
         const type = detectInputType(fpInput);
-
-        // 2. Prepare payload and set internal state for next step
         const payload = { className: "", email: "", phone: "" };
 
-        // Reset internal states first
         setFpClassName("");
         setFpEmail("");
         setFpPhone("");
@@ -190,14 +250,12 @@ const AuthPage = () => {
         setFpMessage(res.data?.message || "OTP sent to registered details.");
         setFpStep("verify");
       } else {
-        // Verify Step
         if (fpNewPassword !== fpConfirmPassword) {
           setFpError("Passwords do not match.");
           setFpLoading(false);
           return;
         }
 
-        // We use the hidden states (fpClassName, etc) that we set in step 1
         const res = await resetPasswordWithOtp({
           className: fpClassName,
           email: fpEmail,
@@ -217,11 +275,8 @@ const AuthPage = () => {
   };
 
   const openForgotModal = () => {
-    // Pre-fill the single input with whatever the user typed in login form
-    // Priority: Email > Phone > ClassName
     const prefill = email || phone || className || "";
     setFpInput(prefill);
-
     setFpOtp(new Array(6).fill(""));
     setFpNewPassword("");
     setFpConfirmPassword("");
@@ -231,6 +286,7 @@ const AuthPage = () => {
     setShowForgotModal(true);
   };
 
+  // --- Verify Email (Owner) ---
   const handleVerifyEmail = async (e) => {
     e.preventDefault();
     setVerifyError("");
@@ -252,6 +308,7 @@ const AuthPage = () => {
       if (data.token && data.studio) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("studioName", data.studio.className);
+        localStorage.setItem("role", "owner");
         setTimeout(() => {
           setShowVerifyModal(false);
           navigate("/dashboard");
@@ -264,25 +321,27 @@ const AuthPage = () => {
     }
   };
 
+  // Detect if "error" state is actually a success notice (trainer registration)
+  const isSuccessNotice =
+    userType === "trainer" && registeredEmail === "pending" && !error;
+
   return (
-    <div className=" flex items-center justify-center bg-[#1F1216] relative overflow-hidden px-4 font-sans selection:bg-rose-500/30"
-    style={{minHeight:"100dvh"}}>
+    <div
+      className="flex items-center justify-center bg-[#1F1216] relative overflow-hidden px-4 font-sans selection:bg-rose-500/30"
+      style={{ minHeight: "100dvh" }}
+    >
       {/* Background Ambience */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-rose-600/15 rounded-full blur-[120px]" />
         <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-indigo-900/20 rounded-full blur-[100px]" />
       </div>
 
-      {/* --- Main Card --- */}
+      {/* Main Card */}
       <div className="relative z-10 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-black/40 max-w-[420px] w-full p-8 md:p-10 border border-white/40 ring-1 ring-white/50">
         {/* Header */}
-        <div className="flex flex-col items-center text-center space-y-4 mb-8">
+        <div className="flex flex-col items-center text-center space-y-4 mb-6">
           <div className="h-16 w-16 rounded-2xl bg-linear-to-br from-[#29171c] to-[#3d1f28] flex items-center justify-center text-white p-3 shadow-lg shadow-rose-900/20 transform hover:rotate-3 transition-transform duration-300">
-            <img
-              src={image}
-              alt="Logo"
-              className="w-full h-full object-contain"
-            />
+            <img src={image} alt="Logo" className="w-full h-full object-contain" />
           </div>
           <div>
             <h1
@@ -291,17 +350,46 @@ const AuthPage = () => {
             >
               D N C R
             </h1>
-
             <p className="text-slate-500 text-sm mt-1 font-medium">
-              {mode === "login"
-                ? "Welcome back, Studio Owner"
-                : "Start your journey with us"}
+              {userType === "owner"
+                ? mode === "login"
+                  ? "Welcome back, Studio Owner"
+                  : "Register your studio"
+                : mode === "login"
+                ? "Trainer login"
+                : "Join a studio as a trainer"}
             </p>
           </div>
         </div>
 
-        {/* Toggle Tabs */}
-        <div className="bg-slate-100/80 p-1.5 rounded-2xl flex relative mb-8 border border-slate-200/50">
+        {/* Role Toggle: Owner / Trainer */}
+        <div className="flex gap-2 mb-5">
+          <button
+            onClick={() => { setUserType("owner"); setMode("login"); }}
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold border transition-all duration-200 ${
+              userType === "owner"
+                ? "bg-[#29171c] text-white border-transparent shadow-md"
+                : "bg-slate-50 text-slate-500 border-slate-200 hover:border-slate-300"
+            }`}
+          >
+            <Building2 size={15} />
+            Studio Owner
+          </button>
+          <button
+            onClick={() => { setUserType("trainer"); setMode("login"); }}
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold border transition-all duration-200 ${
+              userType === "trainer"
+                ? "bg-[#29171c] text-white border-transparent shadow-md"
+                : "bg-slate-50 text-slate-500 border-slate-200 hover:border-slate-300"
+            }`}
+          >
+            <UserCog size={15} />
+            Trainer
+          </button>
+        </div>
+
+        {/* Login / Register Tab Switcher */}
+        <div className="bg-slate-100/80 p-1.5 rounded-2xl flex relative mb-6 border border-slate-200/50">
           <div
             className={`absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-white rounded-xl shadow-sm transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] ${
               mode === "login" ? "left-1.5" : "left-[calc(50%+1.5px)]"
@@ -310,9 +398,7 @@ const AuthPage = () => {
           <button
             onClick={() => setMode("login")}
             className={`flex-1 py-2.5 text-sm font-bold rounded-xl transition-colors duration-200 relative z-10 ${
-              mode === "login"
-                ? "text-rose-700"
-                : "text-slate-500 hover:text-slate-700"
+              mode === "login" ? "text-rose-700" : "text-slate-500 hover:text-slate-700"
             }`}
           >
             Login
@@ -320,9 +406,7 @@ const AuthPage = () => {
           <button
             onClick={() => setMode("register")}
             className={`flex-1 py-2.5 text-sm font-bold rounded-xl transition-colors duration-200 relative z-10 ${
-              mode === "register"
-                ? "text-rose-700"
-                : "text-slate-500 hover:text-slate-700"
+              mode === "register" ? "text-rose-700" : "text-slate-500 hover:text-slate-700"
             }`}
           >
             Register
@@ -332,23 +416,52 @@ const AuthPage = () => {
         {/* Form */}
         <form className="space-y-5" onSubmit={handleSubmit}>
           <div className="space-y-4">
-            <InputGroup
-              icon={User}
-              type="text"
-              placeholder="Studio / Class Name"
-              value={className}
-              onChange={setClassName}
-            />
 
-            {mode === "register" && (
-              <div className="animate-in slide-in-from-top-4 fade-in duration-300 space-y-4">
+            {/* ── Owner Fields ── */}
+            {userType === "owner" && (
+              <>
                 <InputGroup
-                  icon={Phone}
-                  type="tel"
-                  placeholder="Phone Number"
-                  value={phone}
-                  onChange={setPhone}
+                  icon={User}
+                  type="text"
+                  placeholder="Studio / Class Name"
+                  value={className}
+                  onChange={setClassName}
                 />
+                {mode === "register" && (
+                  <div className="animate-in slide-in-from-top-4 fade-in duration-300 space-y-4">
+                    <InputGroup
+                      icon={Phone}
+                      type="tel"
+                      placeholder="Phone Number"
+                      value={phone}
+                      onChange={setPhone}
+                    />
+                    <InputGroup
+                      icon={Mail}
+                      type="email"
+                      placeholder="Email Address"
+                      value={email}
+                      onChange={setEmail}
+                    />
+                  </div>
+                )}
+              </>
+            )}
+
+            {/* ── Trainer Fields ── */}
+            {userType === "trainer" && (
+              <>
+                {mode === "register" && (
+                  <div className="animate-in slide-in-from-top-4 fade-in duration-300 space-y-4">
+                    <InputGroup
+                      icon={User}
+                      type="text"
+                      placeholder="Your Full Name"
+                      value={trainerName}
+                      onChange={setTrainerName}
+                    />
+                  </div>
+                )}
                 <InputGroup
                   icon={Mail}
                   type="email"
@@ -356,9 +469,38 @@ const AuthPage = () => {
                   value={email}
                   onChange={setEmail}
                 />
-              </div>
+                {/* Studio dropdown – only on register */}
+                {mode === "register" && (
+                  <div className="relative group animate-in slide-in-from-top-4 fade-in duration-300">
+                    <Building2
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-rose-600 transition-colors"
+                      size={18}
+                    />
+                    <select
+                      value={selectedStudioId}
+                      onChange={(e) => setSelectedStudioId(e.target.value)}
+                      required
+                      className="w-full bg-slate-50/50 hover:bg-slate-50 focus:bg-white rounded-xl border border-slate-200 pl-11 pr-10 py-3.5 text-sm outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all text-slate-800 font-medium appearance-none"
+                    >
+                      <option value="">
+                        {studiosLoading ? "Loading studios…" : "Select your studio"}
+                      </option>
+                      {studios.map((s) => (
+                        <option key={s._id} value={s._id}>
+                          {s.className}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                      size={16}
+                    />
+                  </div>
+                )}
+              </>
             )}
 
+            {/* Password (always visible) */}
             <div className="relative group">
               <Lock
                 className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-rose-600 transition-colors"
@@ -386,8 +528,8 @@ const AuthPage = () => {
             </div>
           </div>
 
-          {/* Forgot Password Link */}
-          {mode === "login" && (
+          {/* Forgot Password (Owner login only) */}
+          {mode === "login" && userType === "owner" && (
             <div className="flex justify-end">
               <button
                 type="button"
@@ -399,6 +541,17 @@ const AuthPage = () => {
             </div>
           )}
 
+          {/* Trainer register pending notice */}
+          {userType === "trainer" && registeredEmail === "pending" && mode === "login" && (
+            <div className="flex items-start gap-3 text-sm text-emerald-700 bg-emerald-50/80 border border-emerald-100 rounded-xl p-3 animate-in fade-in zoom-in-95 duration-200">
+              <span className="text-lg leading-none">✅</span>
+              <p className="font-medium">
+                Registration submitted! Your account is pending approval from the studio owner.
+              </p>
+            </div>
+          )}
+
+          {/* Error message */}
           {error && (
             <div className="flex items-start gap-3 text-sm text-rose-600 bg-rose-50/80 border border-rose-100 rounded-xl p-3 animate-in fade-in zoom-in-95 duration-200">
               <span className="text-lg leading-none">⚠️</span>
@@ -415,7 +568,13 @@ const AuthPage = () => {
               <Loader2 className="animate-spin" size={18} />
             ) : (
               <>
-                <span>{mode === "login" ? "Sign In" : "Create Account"}</span>
+                <span>
+                  {mode === "login"
+                    ? "Sign In"
+                    : userType === "trainer"
+                    ? "Submit Request"
+                    : "Create Account"}
+                </span>
                 <ArrowRight size={18} className="opacity-80" />
               </>
             )}
@@ -433,9 +592,7 @@ const AuthPage = () => {
       {showForgotModal && (
         <ModalOverlay onClose={() => setShowForgotModal(false)}>
           <div className="text-center mb-6">
-            <h3 className="text-xl font-bold text-slate-900">
-              Forgot Password
-            </h3>
+            <h3 className="text-xl font-bold text-slate-900">Forgot Password</h3>
             <p className="text-xs text-slate-500 mt-1 max-w-[260px] mx-auto">
               {fpStep === "request"
                 ? "Enter your Class Name, Email OR Phone to receive an OTP."
@@ -446,7 +603,6 @@ const AuthPage = () => {
           <form onSubmit={handleForgotSubmit} className="space-y-6">
             {fpStep === "request" && (
               <div className="animate-in slide-in-from-right-4 duration-300">
-                {/* SINGLE INPUT for all */}
                 <InputGroup
                   icon={User}
                   placeholder="Class Name / Email / Phone"
@@ -458,7 +614,6 @@ const AuthPage = () => {
 
             {fpStep === "verify" && (
               <div className="space-y-5 animate-in slide-in-from-right-4 duration-300">
-                {/* OTP BOXES */}
                 <div className="flex justify-center gap-2">
                   {fpOtp.map((data, index) => (
                     <input
@@ -467,9 +622,7 @@ const AuthPage = () => {
                       maxLength="1"
                       className="w-10 h-12 bg-slate-50 border border-slate-200 rounded-lg text-center text-lg font-bold text-slate-800 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20 outline-none transition-all"
                       value={data}
-                      onChange={(e) =>
-                        handleOtpChange(e.target, index, setFpOtp)
-                      }
+                      onChange={(e) => handleOtpChange(e.target, index, setFpOtp)}
                       onKeyDown={(e) => handleOtpKeyDown(e, index, setFpOtp)}
                       onPaste={(e) => handleOtpPaste(e, setFpOtp)}
                     />
@@ -527,7 +680,7 @@ const AuthPage = () => {
         </ModalOverlay>
       )}
 
-      {/* Verify Email Modal */}
+      {/* Verify Email Modal (Owner only) */}
       {showVerifyModal && (
         <ModalOverlay onClose={() => setShowVerifyModal(false)}>
           <div className="text-center mb-6">
@@ -537,9 +690,7 @@ const AuthPage = () => {
             <h3 className="text-xl font-bold text-slate-900">Verify Email</h3>
             <p className="text-xs text-slate-500 mt-2">
               Code sent to{" "}
-              <span className="font-semibold text-slate-700">
-                {registeredEmail}
-              </span>
+              <span className="font-semibold text-slate-700">{registeredEmail}</span>
             </p>
           </div>
 
@@ -552,9 +703,7 @@ const AuthPage = () => {
                   maxLength="1"
                   className="w-10 h-12 bg-slate-50 border border-slate-200 rounded-lg text-center text-lg font-bold text-slate-800 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20 outline-none transition-all"
                   value={data}
-                  onChange={(e) =>
-                    handleOtpChange(e.target, index, setVerifyOtp)
-                  }
+                  onChange={(e) => handleOtpChange(e.target, index, setVerifyOtp)}
                   onKeyDown={(e) => handleOtpKeyDown(e, index, setVerifyOtp)}
                   onPaste={(e) => handleOtpPaste(e, setVerifyOtp)}
                 />
@@ -577,11 +726,7 @@ const AuthPage = () => {
               disabled={verifyLoading}
               className="w-full py-3 rounded-xl bg-rose-600 text-white text-xs font-bold hover:bg-rose-700 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-rose-200"
             >
-              {verifyLoading ? (
-                <Loader2 size={16} className="animate-spin" />
-              ) : (
-                "Verify Account"
-              )}
+              {verifyLoading ? <Loader2 size={16} className="animate-spin" /> : "Verify Account"}
             </button>
           </form>
         </ModalOverlay>
@@ -592,13 +737,7 @@ const AuthPage = () => {
 
 // --- Sub Components ---
 
-const InputGroup = ({
-  icon: Icon,
-  type = "text",
-  placeholder,
-  value,
-  onChange,
-}) => (
+const InputGroup = ({ icon: Icon, type = "text", placeholder, value, onChange }) => (
   <div className="relative group">
     <Icon
       className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-rose-600 transition-colors"

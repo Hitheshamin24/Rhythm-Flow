@@ -1,12 +1,14 @@
 const express = require("express");
 const protect = require("../middleware/authMiddleware");
+const { ownerOnly } = require("../middleware/authMiddleware");
 const {
   getSettings,
   updateSettings,
 } = require("../controllers/settingsController");
 
 const router = express.Router();
-router.use(protect);
+// Settings is restricted to Studio Owners – trainers cannot access this
+router.use(protect, ownerOnly);
 
 /**
  * GET SETTINGS

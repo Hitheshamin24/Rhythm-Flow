@@ -35,3 +35,13 @@ export const resetPasswordWithOtp = ({
     email: email || undefined,
     otp,
   });
+
+// --- Staff (Trainer) Auth ---
+export const staffLogin = (email, password) =>
+  client.post("/auth/staff-login", { email, password });
+
+export const staffRegister = (name, email, password, studioId) =>
+  client.post("/auth/staff-register", { name, email, password, studioId });
+
+// Public list of studios for the trainer registration dropdown
+export const getStudiosList = () => client.get("/studios/list");
