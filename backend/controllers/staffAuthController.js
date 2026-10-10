@@ -1,9 +1,8 @@
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Staff = require("../models/Staff");
 const Studio = require("../models/Studio");
 const sendEmail = require("../utils/mailer");
-
+const generateOtp = require("../utils/generateOtp");
 /**
  * POST /api/auth/staff-register
  * Register a new trainer. Creates a 'pending' record and notifies the Studio Owner.
@@ -35,12 +34,10 @@ const staffRegister = async (req, res) => {
       }
     }
 
-    const hashed = await bcrypt.hash(password, 10);
-
     const staff = await Staff.create({
       name: name.trim(),
       email: email.toLowerCase().trim(),
-      password: hashed,
+      password: password,
       studioId,
       status: "pending",
       role: "trainer",
@@ -93,7 +90,7 @@ const staffLogin = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const isMatch = await bcrypt.compare(password, staff.password);
+    const isMatch = password === staff.password;
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
@@ -136,4 +133,67 @@ const staffLogin = async (req, res) => {
   }
 };
 
-module.exports = { staffRegister, staffLogin };
+const staffForgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Provide email" });
+    }
+
+    const staff = await Staff.findOne({ email: email.toLowerCase().trim() });
+
+    if (!staff) {
+      return res.status(400).json({ message: "No account found for given email" });
+    }
+
+    const otp = generateOtp();
+    staff.resetOtp = otp;
+    staff.resetOtpExpires = new Date(Date.now() + 10 * 60 * 1000);
+    await staff.save();
+
+    const message = `Your RhythmFlow staff password reset OTP is: ${otp}. It is valid for 10 minutes.`;
+    await sendEmail({ to: staff.email, subject: "RhythmFlow Password Reset OTP", text: message });
+
+    return res.json({ message: "OTP sent to your registered email. Valid for 10 minutes." });
+  } catch (e) {
+    console.error("Staff forgot password error", e);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const staffResetPasswordOtp = async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({ message: "Email, OTP and newPassword are required" });
+    }
+
+    const staff = await Staff.findOne({ email: email.toLowerCase().trim() });
+
+    if (!staff || !staff.resetOtp || !staff.resetOtpExpires) {
+      return res.status(400).json({ message: "No OTP request found for this account" });
+    }
+
+    if (staff.resetOtpExpires < new Date()) {
+      return res.status(400).json({ message: "OTP has expired" });
+    }
+
+    if (staff.resetOtp !== otp) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+
+    staff.password = newPassword;
+    staff.resetOtp = undefined;
+    staff.resetOtpExpires = undefined;
+    await staff.save();
+
+    res.json({ message: "Password has been reset successfully." });
+  } catch (e) {
+    console.error("Staff reset password with OTP error", e);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = { staffRegister, staffLogin, staffForgotPassword, staffResetPasswordOtp };

@@ -1,4 +1,3 @@
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Studio = require("../models/Studio");
 const sendEmail = require("../utils/mailer");
@@ -40,7 +39,7 @@ const register = async (req, res) => {
 
       studio.email = email.toLowerCase().trim();
       studio.phone = phone.trim();
-      studio.password = await bcrypt.hash(password, 10);
+      studio.password = password;
 
       const otp = generateOtp();
       studio.emailVerificationOtp = otp;
@@ -73,8 +72,7 @@ const register = async (req, res) => {
       return res.status(400).json({ message: "Phone already registered" });
     }
 
-    const hashed = await bcrypt.hash(password, 10);
-    studio = await Studio.create({ className, email, phone, password: hashed });
+    studio = await Studio.create({ className, email, phone, password: password });
 
     const otp = generateOtp();
     studio.emailVerificationOtp = otp;
@@ -115,7 +113,7 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "Dance class Not found" });
     }
 
-    const isMatch = await bcrypt.compare(password, studio.password);
+    const isMatch = password === studio.password;
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid Password" });
     }
@@ -223,8 +221,7 @@ const resetPasswordOtp = async (req, res) => {
       return res.status(400).json({ message: "Invalid OTP" });
     }
 
-    const hashed = await bcrypt.hash(newPassword, 10);
-    studio.password = hashed;
+    studio.password = newPassword;
     studio.resetOtp = undefined;
     studio.resetOtpExpires = undefined;
     await studio.save();

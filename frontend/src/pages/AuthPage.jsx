@@ -9,6 +9,8 @@ import {
   staffLogin,
   staffRegister,
   getStudiosList,
+  staffRequestPasswordOtp,
+  staffResetPasswordWithOtp,
 } from "../api/auth";
 
 import {
@@ -246,7 +248,12 @@ const AuthPage = () => {
           setFpClassName(fpInput);
         }
 
-        const res = await requestPasswordOtp(payload);
+        let res;
+        if (userType === "owner") {
+          res = await requestPasswordOtp(payload);
+        } else {
+          res = await staffRequestPasswordOtp({ email: fpInput });
+        }
         setFpMessage(res.data?.message || "OTP sent to registered details.");
         setFpStep("verify");
       } else {
@@ -256,13 +263,22 @@ const AuthPage = () => {
           return;
         }
 
-        const res = await resetPasswordWithOtp({
-          className: fpClassName,
-          email: fpEmail,
-          phone: fpPhone,
-          otp: otpString,
-          newPassword: fpNewPassword,
-        });
+        let res;
+        if (userType === "owner") {
+          res = await resetPasswordWithOtp({
+            className: fpClassName,
+            email: fpEmail,
+            phone: fpPhone,
+            otp: otpString,
+            newPassword: fpNewPassword,
+          });
+        } else {
+          res = await staffResetPasswordWithOtp({
+            email: fpInput,
+            otp: otpString,
+            newPassword: fpNewPassword,
+          });
+        }
 
         setFpMessage(res.data?.message || "Password reset successful.");
         setTimeout(() => setShowForgotModal(false), 1500);
@@ -525,8 +541,8 @@ const AuthPage = () => {
             </div>
           </div>
 
-          {/* Forgot Password (Owner login only) */}
-          {mode === "login" && userType === "owner" && (
+          {/* Forgot Password */}
+          {mode === "login" && (
             <div className="flex justify-end">
               <button
                 type="button"
@@ -592,7 +608,9 @@ const AuthPage = () => {
             <h3 className="text-xl font-bold text-slate-900">Forgot Password</h3>
             <p className="text-xs text-slate-500 mt-1 max-w-[260px] mx-auto">
               {fpStep === "request"
-                ? "Enter your Class Name, Email OR Phone to receive an OTP."
+                ? userType === "owner"
+                  ? "Enter your Class Name, Email OR Phone to receive an OTP."
+                  : "Enter your registered Email to receive an OTP."
                 : "Enter the code sent to your device and set a new password."}
             </p>
           </div>
@@ -602,7 +620,7 @@ const AuthPage = () => {
               <div className="animate-in slide-in-from-right-4 duration-300">
                 <InputGroup
                   icon={User}
-                  placeholder="Class Name / Email / Phone"
+                  placeholder={userType === "owner" ? "Class Name / Email / Phone" : "Email"}
                   value={fpInput}
                   onChange={setFpInput}
                 />

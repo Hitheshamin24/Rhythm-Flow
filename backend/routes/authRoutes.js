@@ -9,6 +9,8 @@ const {
 const {
   staffRegister,
   staffLogin,
+  staffForgotPassword,
+  staffResetPasswordOtp,
 } = require("../controllers/staffAuthController");
 
 const router = express.Router();
@@ -33,5 +35,11 @@ router.post("/staff-register", staffRegister);
 
 // POST /api/auth/staff-login     – Trainer login
 router.post("/staff-login", staffLogin);
+
+// POST /api/auth/staff-forgot-password
+router.post("/staff-forgot-password", staffForgotPassword);
+
+// POST /api/auth/staff-reset-password-otp
+router.post("/staff-reset-password-otp", staffResetPasswordOtp);
 
 module.exports = router;

@@ -45,3 +45,10 @@ export const staffRegister = (name, email, password, studioId) =>
 
 // Public list of studios for the trainer registration dropdown
 export const getStudiosList = () => client.get("/studios/list");
+
+// --- Staff (Trainer) Forgot Password ---
+export const staffRequestPasswordOtp = ({ email }) =>
+  client.post("/auth/staff-forgot-password", { email });
+
+export const staffResetPasswordWithOtp = ({ email, otp, newPassword }) =>
+  client.post("/auth/staff-reset-password-otp", { email, otp, newPassword });

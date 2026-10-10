@@ -37,6 +37,8 @@ const staffSchema = new mongoose.Schema(
       type: String,
       default: "trainer",
     },
+    resetOtp: { type: String },
+    resetOtpExpires: { type: Date },
   },
   { timestamps: true }
 );

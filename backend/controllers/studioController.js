@@ -1,4 +1,3 @@
-const bcrypt = require("bcryptjs");
 const Studio = require("../models/Studio");
 const sendEmail = require("../utils/mailer");
 const generateOtp = require("../utils/generateOtp");
@@ -193,13 +192,12 @@ const changePassword = async (req, res) => {
       return res.status(404).json({ message: "Studio not found" });
     }
 
-    const isMatch = await bcrypt.compare(currentPassword, studio.password);
+    const isMatch = currentPassword === studio.password;
     if (!isMatch) {
       return res.status(400).json({ message: "Current password is incorrect" });
     }
 
-    const hashed = await bcrypt.hash(newPassword, 10);
-    studio.password = hashed;
+    studio.password = newPassword;
     await studio.save();
 
     res.json({ message: "Password updated successfully" });
