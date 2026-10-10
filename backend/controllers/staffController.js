@@ -96,4 +96,26 @@ const rejectStaff = async (req, res) => {
   }
 };
 
-module.exports = { listStudios, getPendingStaff, approveStaff, rejectStaff };
+/**
+ * GET /api/staff
+ * Owner only – fetch all approved trainers for their studio.
+ */
+const getAllStaff = async (req, res) => {
+  try {
+    if (req.role !== "owner") {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const staff = await Staff.find(
+      { studioId: req.studioId, status: "approved" },
+      "name email createdAt status"
+    ).lean();
+
+    return res.json(staff);
+  } catch (err) {
+    console.error("Get all staff error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = { listStudios, getPendingStaff, approveStaff, rejectStaff, getAllStaff };

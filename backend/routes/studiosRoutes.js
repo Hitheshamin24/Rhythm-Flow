@@ -5,6 +5,7 @@ const {
   getPendingStaff,
   approveStaff,
   rejectStaff,
+  getAllStaff,
 } = require("../controllers/staffController");
 
 const router = express.Router();
@@ -16,10 +17,12 @@ const router = express.Router();
 router.get("/list", listStudios);
 
 /**
+ * GET /api/staff                 – Owner only: list approved trainers
  * GET /api/staff/pending         – Owner only: list pending trainers
  * PUT /api/staff/:id/approve     – Owner only: approve a trainer
  * PUT /api/staff/:id/reject      – Owner only: reject a trainer
  */
+router.get("/staff", protect, getAllStaff);
 router.get("/staff/pending", protect, getPendingStaff);
 router.put("/staff/:id/approve", protect, approveStaff);
 router.put("/staff/:id/reject", protect, rejectStaff);

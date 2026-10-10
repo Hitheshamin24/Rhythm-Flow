@@ -13,7 +13,7 @@ const mongoose = require("mongoose");
  *   req.role      – 'owner' | 'trainer'
  *   req.staffId   – ObjectId of the staff member (trainers only)
  */
-const protect = (req, res, next) => {
+const protect = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -31,6 +31,12 @@ const protect = (req, res, next) => {
     if (decoded.role === "trainer" && decoded.staffId) {
       req.role = "trainer";
       req.staffId = new mongoose.Types.ObjectId(decoded.staffId);
+      
+      const Staff = require("../models/Staff");
+      const staff = await Staff.findById(req.staffId);
+      if (!staff || staff.status !== "approved") {
+        return res.status(401).json({ message: "Trainer account not approved or removed" });
+      }
     } else {
       req.role = "owner";
     }

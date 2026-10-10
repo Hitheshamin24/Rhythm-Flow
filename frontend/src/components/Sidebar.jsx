@@ -25,7 +25,7 @@ const ownerNavItems = [
   { label: "Attendance", path: "/dashboard/attendance", icon: <Calendar size={20} /> },
   { label: "Payments", path: "/dashboard/payments", icon: <CreditCard size={20} /> },
   { label: "Finances", path: "/dashboard/finances", icon: <TrendingUp size={20} /> },
-  { label: "Approvals", path: "/dashboard/trainer-approvals", icon: <UserCheck size={20} /> },
+  { label: "Trainers", path: "/dashboard/trainer-approvals", icon: <UserCheck size={20} /> },
   { label: "Settings", path: "/dashboard/settings", icon: <Settings size={20} /> },
 ];
 
