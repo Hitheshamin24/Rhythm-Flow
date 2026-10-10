@@ -27,7 +27,12 @@ const staffRegister = async (req, res) => {
     // Check if this email is already registered as a trainer
     const existingStaff = await Staff.findOne({ email: email.toLowerCase().trim() });
     if (existingStaff) {
-      return res.status(400).json({ message: "Email already registered as a trainer" });
+      if (existingStaff.status === "rejected") {
+        // If they were previously rejected/removed, delete the old record to allow re-registration
+        await Staff.deleteOne({ _id: existingStaff._id });
+      } else {
+        return res.status(400).json({ message: "Email already registered as a trainer" });
+      }
     }
 
     const hashed = await bcrypt.hash(password, 10);
