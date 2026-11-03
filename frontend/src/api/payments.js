@@ -1,7 +1,16 @@
 import client from "./client";
 
-export const getPayments = () => client.get("/payments");
-export const markPaid = (id) => client.put(`/payments/pay/${id}`);
-export const markUnpaid = (id) => client.put(`/payments/unpay/${id}`);
+export const getPayments = (year, month) => {
+  const params = {};
+  if (year !== undefined) params.year = year;
+  if (month !== undefined) params.month = month;
+  return client.get("/payments", { params });
+};
+
+export const markPaid = (id, year, month) =>
+  client.put(`/payments/pay/${id}`, { year, month });
+
+export const markUnpaid = (id, year, month) =>
+  client.put(`/payments/unpay/${id}`, { year, month });
 
 export const resetAllToUnpaid = () => client.put("/payments/reset");
