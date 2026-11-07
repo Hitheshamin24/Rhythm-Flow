@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+﻿const mongoose = require("mongoose");
 const Student = require("../models/Student");
 const Expense = require("../models/Expense");
 const Payment = require("../models/Payment");
@@ -7,14 +7,14 @@ const getSummary = async (req, res) => {
   try {
     const studioId = req.studioId;
 
-    // ── Expected income: sum of all active students' monthly fees ──
+    // â”€â”€ Expected income: sum of all active students' monthly fees â”€â”€
     const students = await Student.find({ studio: studioId, isActive: true });
     const totalExpected = students.reduce(
       (sum, s) => sum + (s.monthlyFee || 0),
       0
     );
 
-    // ── Collected: sum from Payment records for the current month ──
+    // â”€â”€ Collected: sum from Payment records for the current month â”€â”€
     // Using Payment records (same source as the bar chart) keeps the
     // summary cards consistent and prevents isPaid-flag drift.
     const now = new Date();
@@ -34,7 +34,7 @@ const getSummary = async (req, res) => {
       0
     );
 
-    // ── Fallback: if no Payment records exist yet use isPaid flag ──
+    // â”€â”€ Fallback: if no Payment records exist yet use isPaid flag â”€â”€
     // (for studios that haven't generated any Payment records yet)
     let effectiveCollected = totalCollected;
     const hasAnyPaymentRecords = await Payment.exists({ studio: studioId });
@@ -46,7 +46,7 @@ const getSummary = async (req, res) => {
 
     const pending = totalExpected - effectiveCollected;
 
-    // ── Expenses: current month only ──
+    // â”€â”€ Expenses: current month only â”€â”€
     const startOfMonth = currentMonthStart;
     const expenses = await Expense.find({
       studio: studioId,
@@ -166,7 +166,6 @@ const getMonthly = async (req, res) => {
       expenseMap[key] = e.total;
     });
 
-    // --- INCOME: Use Payment records (each payment is tied to a forMonth) ---
     const incomeAgg = await Payment.aggregate([
       {
         $match: {
@@ -194,7 +193,6 @@ const getMonthly = async (req, res) => {
       incomeMap[key] = e.total;
     });
 
-    // --- FALLBACK: If no Payment records exist yet, use the old lastPaidDate approach ---
     // This handles studios that were using the app before the Payment model was introduced
     const hasAnyPaymentRecords = await Payment.exists({
       studio: new mongoose.Types.ObjectId(studioId),

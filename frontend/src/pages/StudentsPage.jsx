@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+﻿import { useEffect, useState, useMemo } from "react";
 import client from "../api/client";
 import { getSettings } from "../api/settings";
 
@@ -45,7 +45,6 @@ const StudentsPage = () => {
   const [selectedIds, setSelectedIds] = useState([]); // student ids
   const [updatingBatch, setUpdatingBatch] = useState(false);
 
-  // ---- Helpers ----
   const getBatchLabel = (batchId) => {
     if (!batchId) return "No batch";
     const b = batches.find((x) => x._id === batchId);
@@ -53,7 +52,6 @@ const StudentsPage = () => {
     return b.timing ? `${b.name} (${b.timing})` : b.name;
   };
 
-  // ---- Toggle Active/Inactive ----
   const handleToggleisActive = async (student) => {
     try {
       setTogglingId(student._id);
@@ -84,7 +82,6 @@ const StudentsPage = () => {
     }
   };
 
-  // ---- Loaders ----
   const loadStudents = async () => {
     try {
       setLoading(true);
@@ -126,7 +123,6 @@ const StudentsPage = () => {
     }
   };
 
-  // ---- Form ----
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -162,7 +158,6 @@ const StudentsPage = () => {
     }
   };
 
-  // ---- Checklist selection ----
   const toggleSelectStudent = (id) => {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
@@ -181,7 +176,6 @@ const StudentsPage = () => {
     }
   };
 
-  // ---- Apply batch to selected ----
   const handleApplyBatch = async () => {
     if (!selectedBatch || selectedIds.length === 0) return;
 
@@ -212,7 +206,6 @@ const StudentsPage = () => {
     }
   };
 
-  // ---- Filter / counts ----
   const filteredStudents = students.filter(
     (s) =>
       s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -559,7 +552,7 @@ const StudentsPage = () => {
                                 </div>
                                 <div>
                                    <p className="text-slate-400 font-bold uppercase text-[10px]">Fee</p>
-                                   <p className="text-slate-700 font-medium">₹{s.monthlyFee}</p>
+                                   <p className="text-slate-700 font-medium">â‚¹{s.monthlyFee}</p>
                                 </div>
                              </div>
 
@@ -648,7 +641,7 @@ const StudentsPage = () => {
                               {s.parentName || "-"}
                             </div>
                             <div className="text-[10px] font-bold text-slate-400 uppercase mt-0.5">
-                              {s.monthlyFee ? `Fee: ₹${s.monthlyFee}` : "Fee: -"}
+                              {s.monthlyFee ? `Fee: â‚¹${s.monthlyFee}` : "Fee: -"}
                             </div>
                           </td>
 

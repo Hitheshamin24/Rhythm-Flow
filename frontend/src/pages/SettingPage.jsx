@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { getSettings, updateSettings } from "../api/settings";
 import {
   getStudioProfile,
@@ -28,11 +28,9 @@ import {
 } from "lucide-react";
 
 const SettingsPage = () => {
-  // -------- GLOBAL ALERTS --------
   const [alertMsg, setAlertMsg] = useState("");
   const [alertErr, setAlertErr] = useState("");
 
-  // -------- STUDIO PROFILE --------
   const [studioForm, setStudioForm] = useState({
     className: "",
     email: "",
@@ -40,7 +38,6 @@ const SettingsPage = () => {
   });
   const [savingStudio, setSavingStudio] = useState(false);
 
-  // -------- PASSWORD CHANGE --------
   const [pwForm, setPwForm] = useState({
     currentPassword: "",
     newPassword: "",
@@ -49,7 +46,6 @@ const SettingsPage = () => {
   const [showPw, setShowPw] = useState({ current: false, new: false, confirm: false });
   const [savingPassword, setSavingPassword] = useState(false);
 
-  // -------- APP SETTINGS --------
   const [settingsForm, setSettingsForm] = useState({
     defaultMonthlyFee: "",
     monthStartDay: 1,
@@ -59,13 +55,11 @@ const SettingsPage = () => {
   const [settingsLoading, setSettingsLoading] = useState(false);
   const [settingsSaving, setSettingsSaving] = useState(false);
 
-  // -------- Profile OTP (Changed to Array for 6-box style) --------
   const [showProfileOtpModal, setShowProfileOtpModal] = useState(false);
   const [profileOtp, setProfileOtp] = useState(new Array(6).fill(""));
   const [profileOtpLoading, setProfileOtpLoading] = useState(false);
   const [profileOtpError, setProfileOtpError] = useState("");
 
-  // -------- Forgot Password Modal --------
   const [showForgotModal, setShowForgotModal] = useState(false);
   const [fpStep, setFpStep] = useState("request"); // "request" | "verify"
   
@@ -100,7 +94,7 @@ const SettingsPage = () => {
           defaultMonthlyFee: s.defaultMonthlyFee !== undefined ? String(s.defaultMonthlyFee) : "",
           monthStartDay: s.monthStartDay || 1,
           hideInactiveByDefault: !!s.hideInactiveByDefault,
-          feeReminderTemplate: s.feeReminderTemplate || "Dear {parentName}, this is a reminder that {studentName}'s fee of ₹{amount} for {month} is pending. - {studioName}",
+          feeReminderTemplate: s.feeReminderTemplate || "Dear {parentName}, this is a reminder that {studentName}'s fee of â‚¹{amount} for {month} is pending. - {studioName}",
         });
 
         // Studio
@@ -449,7 +443,7 @@ const SettingsPage = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <InputGroup icon={Wallet} label="Default Monthly Fee (₹)" name="defaultMonthlyFee" type="number" value={settingsForm.defaultMonthlyFee} onChange={handleSettingsChange} placeholder="e.g. 2000" />
+                <InputGroup icon={Wallet} label="Default Monthly Fee (â‚¹)" name="defaultMonthlyFee" type="number" value={settingsForm.defaultMonthlyFee} onChange={handleSettingsChange} placeholder="e.g. 2000" />
 
                 <div className="space-y-1.5">
                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Month Start Day</label>
@@ -574,7 +568,6 @@ const SettingsPage = () => {
   );
 };
 
-// --- SUB COMPONENTS FOR STYLE CONSISTENCY ---
 
 const InputGroup = ({ icon: Icon, label, className="bg-slate-50 hover:bg-white", ...props }) => (
   <div className="space-y-1.5">

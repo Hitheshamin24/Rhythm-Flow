@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   login,
@@ -50,7 +50,6 @@ const AuthPage = () => {
   const [studios, setStudios] = useState([]);
   const [studiosLoading, setStudiosLoading] = useState(false);
 
-  // --- Forgot Password State ---
   const [showForgotModal, setShowForgotModal] = useState(false);
   const [fpStep, setFpStep] = useState("request"); // "request" | "verify"
   const [fpInput, setFpInput] = useState("");
@@ -64,14 +63,12 @@ const AuthPage = () => {
   const [fpMessage, setFpMessage] = useState("");
   const [fpError, setFpError] = useState("");
 
-  // --- Verify Email State (Owner only) ---
   const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [verifyOtp, setVerifyOtp] = useState(new Array(6).fill(""));
   const [verifyLoading, setVerifyLoading] = useState(false);
   const [verifyError, setVerifyError] = useState("");
   const [verifyMessage, setVerifyMessage] = useState("");
 
-  // --- Registered Data Storage ---
   const [registeredClassName, setRegisteredClassName] = useState("");
   const [registeredEmail, setRegisteredEmail] = useState("");
 
@@ -99,7 +96,6 @@ const AuthPage = () => {
     setSelectedStudioId("");
   }, [userType, mode]);
 
-  // --- OTP Helper Functions ---
   const handleOtpChange = (element, index, setOtpState) => {
     if (isNaN(element.value)) return false;
     setOtpState((prevOtp) => {
@@ -142,7 +138,6 @@ const AuthPage = () => {
     }
   };
 
-  // --- Main Form Submit ---
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -193,7 +188,7 @@ const AuthPage = () => {
           setError("");
           // Show a success message instead of navigating
           setMode("login");
-          setError(""); // Reuse error field as info — or use a dedicated state
+          setError(""); // Reuse error field as info â€” or use a dedicated state
           // We'll show a toast-like message via error field (green style handled below)
           setRegisteredEmail("pending");
         }
@@ -206,7 +201,6 @@ const AuthPage = () => {
     }
   };
 
-  // --- Forgot Password ---
   const detectInputType = (input) => {
     const value = input.trim();
     if (value.includes("@")) return "email";
@@ -302,7 +296,6 @@ const AuthPage = () => {
     setShowForgotModal(true);
   };
 
-  // --- Verify Email (Owner) ---
   const handleVerifyEmail = async (e) => {
     e.preventDefault();
     setVerifyError("");
@@ -430,7 +423,7 @@ const AuthPage = () => {
         <form className="space-y-5" onSubmit={handleSubmit}>
           <div className="space-y-4">
 
-            {/* ── Owner Fields ── */}
+            {/* â”€â”€ Owner Fields â”€â”€ */}
             {userType === "owner" && (
               <>
                 <InputGroup
@@ -461,7 +454,7 @@ const AuthPage = () => {
               </>
             )}
 
-            {/* ── Trainer Fields ── */}
+            {/* â”€â”€ Trainer Fields â”€â”€ */}
             {userType === "trainer" && (
               <>
                 {mode === "register" && (
@@ -482,7 +475,7 @@ const AuthPage = () => {
                   value={email}
                   onChange={setEmail}
                 />
-                {/* Studio dropdown – only on register */}
+                {/* Studio dropdown â€“ only on register */}
                 {mode === "register" && (
                   <div className="relative group animate-in slide-in-from-top-4 fade-in duration-300">
                     <Building2
@@ -496,7 +489,7 @@ const AuthPage = () => {
                       className="w-full bg-slate-50/50 hover:bg-slate-50 focus:bg-white rounded-xl border border-slate-200 pl-11 pr-10 py-3.5 text-sm outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all text-slate-800 font-medium appearance-none"
                     >
                       <option value="">
-                        {studiosLoading ? "Loading studios…" : "Select your studio"}
+                        {studiosLoading ? "Loading studiosâ€¦" : "Select your studio"}
                       </option>
                       {studios.map((s) => (
                         <option key={s._id} value={s._id}>
@@ -557,7 +550,7 @@ const AuthPage = () => {
           {/* Trainer register pending notice */}
           {userType === "trainer" && registeredEmail === "pending" && mode === "login" && (
             <div className="flex items-start gap-3 text-sm text-emerald-700 bg-emerald-50/80 border border-emerald-100 rounded-xl p-3 animate-in fade-in zoom-in-95 duration-200">
-              <span className="text-lg leading-none">✅</span>
+              <span className="text-lg leading-none">âœ…</span>
               <p className="font-medium">
                 Registration submitted! Your account is pending approval from the studio owner.
               </p>
@@ -567,7 +560,7 @@ const AuthPage = () => {
           {/* Error message */}
           {error && (
             <div className="flex items-start gap-3 text-sm text-rose-600 bg-rose-50/80 border border-rose-100 rounded-xl p-3 animate-in fade-in zoom-in-95 duration-200">
-              <span className="text-lg leading-none">⚠️</span>
+              <span className="text-lg leading-none">âš ï¸</span>
               <p className="font-medium">{error}</p>
             </div>
           )}
@@ -596,7 +589,7 @@ const AuthPage = () => {
       </div>
 
       <div className="text-white/30 text-xs font-medium tracking-wide mt-8 pb-4">
-        © 2025 DNCR. All rights reserved.
+        Â© 2025 DNCR. All rights reserved.
       </div>
 
       {/* ================= MODALS ================= */}
@@ -750,7 +743,6 @@ const AuthPage = () => {
   );
 };
 
-// --- Sub Components ---
 
 const InputGroup = ({ icon: Icon, type = "text", placeholder, value, onChange }) => (
   <div className="relative group">

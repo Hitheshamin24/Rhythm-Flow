@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+﻿import { useEffect, useState, useMemo } from "react";
 import StatCard from "../components/StatCard";
 import client from "../api/client";
 import { getPayments } from "../api/payments";
@@ -42,7 +42,6 @@ const DashboardPage = () => {
   });
   const [weeklyAttendance, setWeeklyAttendance] = useState([]);
 
-  // ---- Loaders ----
   const loadStudents = async () => {
     const res = await client.get("/students");
     setStudents(res.data || []);
@@ -95,7 +94,6 @@ const DashboardPage = () => {
     ? Math.round((payments.paidCount / payments.total) * 100)
     : 0;
 
-  // ---- Derived Stats ----
   const totalStudents = students.length;
   const activeStudents = useMemo(
     () => students.filter((s) => s.isActive).length,
@@ -119,7 +117,6 @@ const DashboardPage = () => {
     );
   }, [payments]);
 
-  // ---- Recent Payments from payments.paid ----
   const recentPayments = useMemo(() => {
     const paidList = payments.paid || [];
     const sorted = [...paidList].sort((a, b) => {
@@ -141,7 +138,7 @@ const DashboardPage = () => {
       return {
         name: s.name,
         amount: s.monthlyFee
-          ? `+ ₹${Number(s.monthlyFee).toLocaleString("en-IN")}`
+          ? `+ â‚¹${Number(s.monthlyFee).toLocaleString("en-IN")}`
           : "Paid",
         date: dateStr,
         status: "success",
@@ -149,7 +146,6 @@ const DashboardPage = () => {
     });
   }, [payments]);
 
-  // ---- Upcoming classes from batches + student counts ----
   const upcomingClasses = useMemo(() => {
     if (!batches.length) return [];
 
@@ -166,7 +162,7 @@ const DashboardPage = () => {
           ).length;
 
           return {
-            time: b.timing || "—",
+            time: b.timing || "â€”",
             title: b.name,
             instructor: "Studio Batch", // you can later map to real instructor
             students: count,
@@ -207,11 +203,11 @@ const DashboardPage = () => {
           trend={activeStudents >= totalStudents / 2 ? "up" : "down"}
           iconBg="bg-rose-50"
         />
-        {/* Revenue: Amber/Gold Theme – Owner only */}
+        {/* Revenue: Amber/Gold Theme â€“ Owner only */}
         {role === "owner" && (
           <StatCard
             label="Monthly Revenue"
-            value={`₹${monthlyRevenue.toLocaleString("en-IN")}`}
+            value={`â‚¹${monthlyRevenue.toLocaleString("en-IN")}`}
             icon={<Banknote size={22} className="text-amber-600" />}
             subtext={`${payments.paidCount || 0} paid / ${payments.total || 0} students`}
             trend="up"

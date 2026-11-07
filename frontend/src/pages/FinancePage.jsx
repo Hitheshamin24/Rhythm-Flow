@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import {
   getFinanceSummary,
   getMonthlyFinance,
@@ -148,7 +148,6 @@ const FinancePage = () => {
   const monthExpenses = selectedMonth?.expenses || 0;
   const monthProfit = selectedMonth?.profit || 0;
 
-  // --- NEW LOGIC FOR SMOOTH TOGGLE ---
   const monthOptions = [3, 6, 12];
   const activeIndex = monthOptions.indexOf(monthsRange);
 
@@ -223,7 +222,7 @@ const FinancePage = () => {
                     Projected Income
                   </p>
                   <p className="text-3xl font-black text-[#2C1810] mt-2 tracking-tight">
-                    ₹{summary.totalExpected.toLocaleString()}
+                    â‚¹{summary.totalExpected.toLocaleString()}
                   </p>
                 </div>
                 <div className="relative z-10 flex items-center gap-2 text-xs font-bold text-amber-600 bg-amber-50 w-fit px-2 py-1 rounded-lg">
@@ -240,7 +239,7 @@ const FinancePage = () => {
                     Collected
                   </p>
                   <p className="text-3xl font-black text-[#2C1810] mt-2 tracking-tight">
-                    ₹{summary.totalCollected.toLocaleString()}
+                    â‚¹{summary.totalCollected.toLocaleString()}
                   </p>
                 </div>
                 <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 w-fit px-2 py-1 rounded-lg">
@@ -256,7 +255,7 @@ const FinancePage = () => {
                     Expenses
                   </p>
                   <p className="text-3xl font-black text-[#2C1810] mt-2 tracking-tight">
-                    ₹{summary.totalExpenses.toLocaleString()}
+                    â‚¹{summary.totalExpenses.toLocaleString()}
                   </p>
                 </div>
                 <div className="flex items-center gap-1.5 text-xs font-bold text-rose-700 bg-rose-50 w-fit px-2 py-1 rounded-lg">
@@ -276,7 +275,7 @@ const FinancePage = () => {
                     Net Profit
                   </p>
                   <p className="text-3xl font-black mt-2 tracking-tight">
-                    ₹{monthProfit.toLocaleString()}
+                    â‚¹{monthProfit.toLocaleString()}
                   </p>
                 </div>
                 
@@ -409,7 +408,7 @@ const FinancePage = () => {
                         Income
                       </p>
                       <p className="text-xl font-bold text-stone-800 mt-1 group-hover:text-emerald-900">
-                        ₹{monthIncome.toLocaleString()}
+                        â‚¹{monthIncome.toLocaleString()}
                       </p>
                     </div>
                     <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center text-stone-300 group-hover:text-emerald-500 group-hover:shadow-sm transition-all">
@@ -424,7 +423,7 @@ const FinancePage = () => {
                         Expenses
                       </p>
                       <p className="text-xl font-bold text-stone-800 mt-1 group-hover:text-rose-900">
-                        ₹{monthExpenses.toLocaleString()}
+                        â‚¹{monthExpenses.toLocaleString()}
                       </p>
                     </div>
                     <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center text-stone-300 group-hover:text-rose-500 group-hover:shadow-sm transition-all">
@@ -439,7 +438,7 @@ const FinancePage = () => {
                         Net Profit
                       </p>
                       <p className="text-2xl font-black text-[#2C1810] mt-1">
-                        ₹{monthProfit.toLocaleString()}
+                        â‚¹{monthProfit.toLocaleString()}
                       </p>
                     </div>
                     <div className="text-right relative z-10">
@@ -514,7 +513,7 @@ const FinancePage = () => {
                             </span>
                           </td>
                           <td className="px-8 py-5 font-bold text-stone-800">
-                            ₹{e.amount.toLocaleString()}
+                            â‚¹{e.amount.toLocaleString()}
                           </td>
                           <td className="px-8 py-5 text-right">
                             <button
@@ -572,7 +571,7 @@ const FinancePage = () => {
                 </label>
                 <div className="relative">
                   <span className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-400 font-bold">
-                    ₹
+                    â‚¹
                   </span>
                   <input
                     type="number"

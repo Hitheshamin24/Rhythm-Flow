@@ -1,4 +1,4 @@
-import { useEffect, useState, forwardRef } from "react";
+﻿import { useEffect, useState, forwardRef } from "react";
 import client from "../api/client";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -16,7 +16,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 
-// Map your schema days → JS Date.getDay() index
+// Map your schema days â†’ JS Date.getDay() index
 const DAY_TO_INDEX = {
   sun: 0,
   mon: 1,
@@ -55,14 +55,14 @@ const AttendancePage = () => {
       !selectedBatch.days ||
       selectedBatch.days.length === 0
     ) {
-      return false; // no batch → no dates allowed
+      return false; // no batch â†’ no dates allowed
     }
 
     const allowedIndexes = selectedBatch.days
       .map((d) => DAY_TO_INDEX[d.toLowerCase()])
       .filter((d) => d !== undefined);
 
-    const dow = date.getDay(); // 0 (Sun) → 6 (Sat)
+    const dow = date.getDay(); // 0 (Sun) â†’ 6 (Sat)
 
     return allowedIndexes.includes(dow);
   };
@@ -119,7 +119,7 @@ const loadAttendance = async (dateObj = selectedDate, batchId = selectedBatchId)
     });
 
     if (res.status === 404) {
-      // no record for this date — default to everyone present
+      // no record for this date â€” default to everyone present
       setAbsentIds(new Set());
       setInfo(`No record found. Defaulting to all present.`);
       return;
@@ -249,7 +249,6 @@ const loadAttendance = async (dateObj = selectedDate, batchId = selectedBatchId)
 
   const isLoading = loadingStudents || loadingAttendance;
 
-  // --- CUSTOM DATE INPUT COMPONENT ---
   const CustomDateInput = forwardRef(({ value, onClick }, ref) => (
     <div
       onClick={onClick}
