@@ -22,7 +22,6 @@ import ProtectedRoute from "./ProtectedRoute";
 const AppRoutes = () => {
   return (
     <Routes>
-      {/* ── Public Route ─────────────────────────────────────────────── */}
       {/* Blocked if already logged in → redirects to /dashboard         */}
       <Route
         path="/auth"
@@ -35,7 +34,6 @@ const AppRoutes = () => {
         }
       />
 
-      {/* ── Protected Routes ─────────────────────────────────────────── */}
       {/* Blocked if not logged in → redirects to /auth                  */}
       <Route
         path="/dashboard/*"
@@ -82,7 +80,6 @@ const AppRoutes = () => {
         }
       />
 
-      {/* ── Default ──────────────────────────────────────────────────── */}
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );

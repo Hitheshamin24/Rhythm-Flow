@@ -57,7 +57,6 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* ── Mobile Hamburger ──────────────────────────────────────────── */}
       <button
         onClick={() => setMobileOpen(true)}
         aria-label="Open menu"
@@ -66,7 +65,6 @@ const Sidebar = () => {
         <Menu size={22} />
       </button>
 
-      {/* ── Mobile Backdrop ───────────────────────────────────────────── */}
       {mobileOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
@@ -74,7 +72,6 @@ const Sidebar = () => {
         />
       )}
 
-      {/* ── Sidebar ───────────────────────────────────────────────────── */}
       <aside
         className={`
           /* Base: fixed full-height panel, flex column */
@@ -99,7 +96,6 @@ const Sidebar = () => {
           {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
         </button>
 
-        {/* ── Logo / Header ─────────────────────────────────────────── */}
         <div className={`flex items-center gap-3 px-5 py-5 shrink-0 ${collapsed ? "md:justify-center" : ""}`}>
           {/* Close button – mobile only, inside header row */}
           <button
@@ -130,7 +126,6 @@ const Sidebar = () => {
           </div>
         </div>
 
-        {/* ── Navigation ────────────────────────────────────────────── */}
         {/*
           flex-1 + overflow-y-auto lets the nav scroll independently
           so the logout button is ALWAYS pinned at the bottom.
@@ -176,7 +171,6 @@ const Sidebar = () => {
           ))}
         </nav>
 
-        {/* ── Logout – always pinned at bottom ──────────────────────── */}
         <div className="shrink-0 p-3 border-t border-white/5">
           <button
             onClick={handleLogout}
