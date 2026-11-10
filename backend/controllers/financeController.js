@@ -7,14 +7,14 @@ const getSummary = async (req, res) => {
   try {
     const studioId = req.studioId;
 
-    // â”€â”€ Expected income: sum of all active students' monthly fees â”€â”€
+    // Expected income: sum of all active students' monthly fees
     const students = await Student.find({ studio: studioId, isActive: true });
     const totalExpected = students.reduce(
       (sum, s) => sum + (s.monthlyFee || 0),
       0
     );
 
-    // â”€â”€ Collected: sum from Payment records for the current month â”€â”€
+    // Collected: sum from Payment records for the current month
     // Using Payment records (same source as the bar chart) keeps the
     // summary cards consistent and prevents isPaid-flag drift.
     const now = new Date();
@@ -34,7 +34,7 @@ const getSummary = async (req, res) => {
       0
     );
 
-    // â”€â”€ Fallback: if no Payment records exist yet use isPaid flag â”€â”€
+    // Fallback: if no Payment records exist yet use isPaid flag
     // (for studios that haven't generated any Payment records yet)
     let effectiveCollected = totalCollected;
     const hasAnyPaymentRecords = await Payment.exists({ studio: studioId });
@@ -46,7 +46,7 @@ const getSummary = async (req, res) => {
 
     const pending = totalExpected - effectiveCollected;
 
-    // â”€â”€ Expenses: current month only â”€â”€
+    // Expenses: current month only
     const startOfMonth = currentMonthStart;
     const expenses = await Expense.find({
       studio: studioId,

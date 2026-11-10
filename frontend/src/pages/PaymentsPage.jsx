@@ -20,7 +20,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-// ── helpers ────────────────────────────────────────────────────────────────
+// helpers
 const MONTH_NAMES = [
   "January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December",
@@ -38,10 +38,8 @@ const isNewThisMonth = (student, year, month) => {
   );
 };
 
-// ──────────────────────────────────────────────────────────────────────────
-
 const PaymentsPage = () => {
-  // ── month navigator state ─────────────────────────────────────────────
+  // month navigator state
   const now = new Date();
   const [viewYear, setViewYear] = useState(now.getFullYear());
   const [viewMonth, setViewMonth] = useState(now.getMonth() + 1); // 1-based
@@ -69,7 +67,7 @@ const PaymentsPage = () => {
     }
   };
 
-  // ── data state ────────────────────────────────────────────────────────
+  // data state
   const [loading, setLoading] = useState(false);
   const [payments, setPayments] = useState({
     total: 0,
@@ -88,7 +86,7 @@ const PaymentsPage = () => {
   const [batches, setBatches] = useState([]);
   const [selectedBatchId, setSelectedBatchId] = useState(""); // "" = all
 
-  // ── helpers ───────────────────────────────────────────────────────────
+  // helpers
   const matchesQuery = (s, q) => {
     const query = String(q || "").toLowerCase().trim();
     if (!query) return true;
@@ -122,7 +120,7 @@ const PaymentsPage = () => {
     [payments.paid, debouncedQuery, selectedBatchId]
   );
 
-  // ── fetch ─────────────────────────────────────────────────────────────
+  // fetch
   const load = async () => {
     try {
       setLoading(true);
@@ -161,7 +159,7 @@ const PaymentsPage = () => {
     return () => clearTimeout(id);
   }, [query]);
 
-  // ── actions ───────────────────────────────────────────────────────────
+  // actions
   const handleToggle = async (student) => {
     try {
       setSavingId(student._id);
@@ -182,10 +180,10 @@ const PaymentsPage = () => {
     }
   };
 
-  // ── render ────────────────────────────────────────────────────────────
+  // render
   return (
     <div className="space-y-8 pb-10">
-      {/* ── Header ──────────────────────────────────────────────────── */}
+      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold text-slate-800">Fee Payments</h2>
@@ -225,7 +223,7 @@ const PaymentsPage = () => {
         </div>
       </div>
 
-      {/* ── Month Navigator ──────────────────────────────────────────── */}
+      {/* Month Navigator */}
       <div className="flex items-center justify-center gap-4">
         <button
           onClick={goToPrevMonth}
@@ -261,14 +259,14 @@ const PaymentsPage = () => {
         </button>
       </div>
 
-      {/* ── Error ────────────────────────────────────────────────────── */}
+      {/* Error */}
       {error && (
         <div className="bg-rose-50 border border-rose-100 text-rose-600 px-4 py-3 rounded-xl text-sm flex items-center gap-2">
           <AlertTriangle size={16} /> {error}
         </div>
       )}
 
-      {/* ── Summary Cards ────────────────────────────────────────────── */}
+      {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Total */}
         <div className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-center justify-between">
@@ -316,7 +314,7 @@ const PaymentsPage = () => {
         </div>
       </div>
 
-      {/* ── Student Lists ─────────────────────────────────────────────── */}
+      {/* Student Lists */}
       {loading ? (
         <div className="flex justify-center py-12">
           <Loader2 size={32} className="animate-spin text-rose-500" />

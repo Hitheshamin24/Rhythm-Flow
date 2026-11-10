@@ -423,7 +423,7 @@ const AuthPage = () => {
         <form className="space-y-5" onSubmit={handleSubmit}>
           <div className="space-y-4">
 
-            {/* â”€â”€ Owner Fields â”€â”€ */}
+            {/* Owner Fields */}
             {userType === "owner" && (
               <>
                 <InputGroup
@@ -454,7 +454,7 @@ const AuthPage = () => {
               </>
             )}
 
-            {/* â”€â”€ Trainer Fields â”€â”€ */}
+            {/* Trainer Fields */}
             {userType === "trainer" && (
               <>
                 {mode === "register" && (
@@ -592,7 +592,7 @@ const AuthPage = () => {
         Â© 2025 DNCR. All rights reserved.
       </div>
 
-      {/* ================= MODALS ================= */}
+      {/* MODALS */}
 
       {/* Forgot Password Modal */}
       {showForgotModal && (

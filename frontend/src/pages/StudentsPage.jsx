@@ -13,7 +13,7 @@ import {
   Loader2,
   X,
   Check,
-  CheckSquare
+  CheckSquare,
 } from "lucide-react";
 
 const StudentsPage = () => {
@@ -60,8 +60,8 @@ const StudentsPage = () => {
       // optimistic
       setStudents((prev) =>
         prev.map((s) =>
-          s._id === student._id ? { ...s, isActive: !Boolean(s.isActive) } : s
-        )
+          s._id === student._id ? { ...s, isActive: !Boolean(s.isActive) } : s,
+        ),
       );
 
       await client.put(`/students/${student._id}`, {
@@ -73,8 +73,8 @@ const StudentsPage = () => {
         prev.map((s) =>
           s._id === student._id
             ? { ...s, isActive: Boolean(student.isActive) }
-            : s
-        )
+            : s,
+        ),
       );
       setError(err.response?.data?.message || "Failed to update status.");
     } finally {
@@ -160,7 +160,7 @@ const StudentsPage = () => {
 
   const toggleSelectStudent = (id) => {
     setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
     );
   };
 
@@ -186,8 +186,8 @@ const StudentsPage = () => {
       // optimistic UI
       setStudents((prev) =>
         prev.map((s) =>
-          selectedIds.includes(s._id) ? { ...s, batch: selectedBatch } : s
-        )
+          selectedIds.includes(s._id) ? { ...s, batch: selectedBatch } : s,
+        ),
       );
 
       // sequential calls to existing single-student endpoint
@@ -210,21 +210,21 @@ const StudentsPage = () => {
     (s) =>
       s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (s.parentName &&
-        s.parentName.toLowerCase().includes(searchTerm.toLowerCase()))
+        s.parentName.toLowerCase().includes(searchTerm.toLowerCase())),
   );
 
   const sortedStudents = [...filteredStudents].sort((a, b) =>
-    a.name.localeCompare(b.name)
+    a.name.localeCompare(b.name),
   );
 
   const activeCount = useMemo(
     () => students.filter((s) => Boolean(s.isActive)).length,
-    [students]
+    [students],
   );
 
   const inactiveCount = useMemo(
     () => students.length - activeCount,
-    [students, activeCount]
+    [students, activeCount],
   );
 
   const allVisibleSelected =
@@ -243,18 +243,22 @@ const StudentsPage = () => {
             Manage registrations, batches and fees.
           </p>
         </div>
-        
+
         {/* Stats Chips */}
         <div className="flex flex-wrap gap-3 items-center">
           <div className="bg-white px-4 py-2 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
-            <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">Active</span>
+            <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
+              Active
+            </span>
             <span className="text-rose-600 text-lg font-black leading-none">
               {activeCount}
             </span>
           </div>
 
           <div className="bg-white px-4 py-2 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
-            <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">Inactive</span>
+            <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
+              Inactive
+            </span>
             <span className="text-slate-600 text-lg font-black leading-none">
               {inactiveCount}
             </span>
@@ -420,12 +424,12 @@ const StudentsPage = () => {
         {/* Search + Global batch controls */}
         <div className="px-5 py-5 border-b border-slate-100 flex flex-col gap-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-             <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
+            <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
               Enrolled Students
             </h3>
-            
+
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-               <div className="relative flex-1 sm:w-64">
+              <div className="relative flex-1 sm:w-64">
                 <Search
                   size={16}
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
@@ -439,7 +443,7 @@ const StudentsPage = () => {
                 />
               </div>
 
-               {/* Global batch + apply */}
+              {/* Global batch + apply */}
               <div className="flex gap-2 w-full sm:w-auto">
                 <select
                   value={selectedBatch}
@@ -464,27 +468,34 @@ const StudentsPage = () => {
                   }
                   className="px-4 py-2.5 rounded-xl bg-rose-600 text-white text-xs sm:text-sm font-bold shadow-md shadow-rose-500/20 hover:bg-rose-700 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  {updatingBatch ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
+                  {updatingBatch ? (
+                    <Loader2 size={16} className="animate-spin" />
+                  ) : (
+                    <Check size={16} />
+                  )}
                   <span className="hidden sm:inline">Apply</span>
                 </button>
               </div>
             </div>
           </div>
-          
+
           {/* Select All Toggle (Visible mostly on Mobile or when items selected) */}
-          {(sortedStudents.length > 0) && (
-             <div className="flex items-center gap-2 px-1">
-                <input
-                  type="checkbox"
-                  id="selectAll"
-                  checked={allVisibleSelected}
-                  onChange={toggleSelectAllVisible}
-                  className="h-4 w-4 rounded border-slate-300 text-rose-600 focus:ring-rose-500 cursor-pointer"
-                />
-                <label htmlFor="selectAll" className="text-xs font-bold text-slate-500 cursor-pointer select-none">
-                   Select All Visible ({selectedIds.length} selected)
-                </label>
-             </div>
+          {sortedStudents.length > 0 && (
+            <div className="flex items-center gap-2 px-1">
+              <input
+                type="checkbox"
+                id="selectAll"
+                checked={allVisibleSelected}
+                onChange={toggleSelectAllVisible}
+                className="h-4 w-4 rounded border-slate-300 text-rose-600 focus:ring-rose-500 cursor-pointer"
+              />
+              <label
+                htmlFor="selectAll"
+                className="text-xs font-bold text-slate-500 cursor-pointer select-none"
+              >
+                Select All Visible ({selectedIds.length} selected)
+              </label>
+            </div>
           )}
         </div>
 
@@ -508,77 +519,105 @@ const StudentsPage = () => {
               {/* MOBILE VIEW: CARDS (Visible on small screens) */}
               <div className="block md:hidden p-4 space-y-3 bg-slate-50/50">
                 {sortedStudents.map((s) => {
-                   const checked = selectedIds.includes(s._id);
-                   return (
-                     <div 
-                       key={s._id} 
-                       className={`bg-white p-4 rounded-2xl border ${checked ? 'border-rose-300 shadow-md shadow-rose-100' : 'border-slate-100 shadow-sm'} transition-all duration-200 relative overflow-hidden`}
-                     >
-                       {/* Left Accent Bar */}
-                       <div className={`absolute left-0 top-0 bottom-0 w-1 ${s.isActive ? 'bg-emerald-400' : 'bg-slate-300'}`} />
+                  const checked = selectedIds.includes(s._id);
+                  return (
+                    <div
+                      key={s._id}
+                      className={`bg-white p-4 rounded-2xl border ${checked ? "border-rose-300 shadow-md shadow-rose-100" : "border-slate-100 shadow-sm"} transition-all duration-200 relative overflow-hidden`}
+                    >
+                      {/* Left Accent Bar */}
+                      <div
+                        className={`absolute left-0 top-0 bottom-0 w-1 ${s.isActive ? "bg-emerald-400" : "bg-slate-300"}`}
+                      />
 
-                       <div className="flex gap-3">
-                          {/* Checkbox */}
-                          <div className="pt-1">
-                             <input
-                                type="checkbox"
-                                checked={checked}
-                                onChange={() => toggleSelectStudent(s._id)}
-                                className="h-5 w-5 rounded border-slate-300 text-rose-600 focus:ring-rose-500"
-                              />
+                      <div className="flex gap-3">
+                        {/* Checkbox */}
+                        <div className="pt-1">
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            onChange={() => toggleSelectStudent(s._id)}
+                            className="h-5 w-5 rounded border-slate-300 text-rose-600 focus:ring-rose-500"
+                          />
+                        </div>
+
+                        <div className="flex-1 min-w-0">
+                          {/* Name & Status */}
+                          <div className="flex justify-between items-start mb-2">
+                            <div>
+                              <h4
+                                className={`text-base font-bold truncate ${!s.isActive && "text-slate-400 line-through"}`}
+                              >
+                                {s.name}
+                              </h4>
+                              <p className="text-xs text-slate-400 font-medium">
+                                {s.phone}
+                              </p>
+                            </div>
+                            <span
+                              className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${s.isPaid ? "bg-emerald-50 text-emerald-700 border-emerald-100" : "bg-amber-50 text-amber-700 border-amber-100"}`}
+                            >
+                              {s.isPaid ? "PAID" : "DUE"}
+                            </span>
                           </div>
-                          
-                          <div className="flex-1 min-w-0">
-                             {/* Name & Status */}
-                             <div className="flex justify-between items-start mb-2">
-                                <div>
-                                   <h4 className={`text-base font-bold truncate ${!s.isActive && 'text-slate-400 line-through'}`}>{s.name}</h4>
-                                   <p className="text-xs text-slate-400 font-medium">{s.phone}</p>
-                                </div>
-                                <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${s.isPaid ? "bg-emerald-50 text-emerald-700 border-emerald-100" : "bg-amber-50 text-amber-700 border-amber-100"}`}>
-                                  {s.isPaid ? "PAID" : "DUE"}
-                                </span>
-                             </div>
 
-                             {/* Details Grid */}
-                             <div className="grid grid-cols-2 gap-y-2 gap-x-4 text-xs mb-3">
-                                <div>
-                                   <p className="text-slate-400 font-bold uppercase text-[10px]">Parent</p>
-                                   <p className="text-slate-700 font-medium truncate">{s.parentName || "-"}</p>
-                                </div>
-                                <div>
-                                   <p className="text-slate-400 font-bold uppercase text-[10px]">Batch</p>
-                                   <p className="text-slate-700 font-medium truncate">{getBatchLabel(s.batch)}</p>
-                                </div>
-                                <div>
-                                   <p className="text-slate-400 font-bold uppercase text-[10px]">Fee</p>
-                                   <p className="text-slate-700 font-medium">â‚¹{s.monthlyFee}</p>
-                                </div>
-                             </div>
-
-                             {/* Actions Row */}
-                             <div className="flex items-center gap-2 pt-2 border-t border-slate-50">
-                                <button
-                                  onClick={() => handleToggleisActive(s)}
-                                  disabled={togglingId === s._id}
-                                  className="flex-1 py-1.5 rounded-lg bg-slate-50 text-slate-600 text-xs font-bold hover:bg-slate-100 transition flex items-center justify-center gap-1"
-                                >
-                                  {togglingId === s._id ? <Loader2 size={12} className="animate-spin" /> : (s.isActive ? "Deactivate" : "Activate")}
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    setSelectedStudent(s);
-                                    setShowDeleteModal(true);
-                                  }}
-                                  className="p-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 transition"
-                                >
-                                   <Trash2 size={14} />
-                                </button>
-                             </div>
+                          {/* Details Grid */}
+                          <div className="grid grid-cols-2 gap-y-2 gap-x-4 text-xs mb-3">
+                            <div>
+                              <p className="text-slate-400 font-bold uppercase text-[10px]">
+                                Parent
+                              </p>
+                              <p className="text-slate-700 font-medium truncate">
+                                {s.parentName || "-"}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-slate-400 font-bold uppercase text-[10px]">
+                                Batch
+                              </p>
+                              <p className="text-slate-700 font-medium truncate">
+                                {getBatchLabel(s.batch)}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-slate-400 font-bold uppercase text-[10px]">
+                                Fee
+                              </p>
+                              <p className="text-slate-700 font-medium">
+                                â‚¹{s.monthlyFee}
+                              </p>
+                            </div>
                           </div>
-                       </div>
-                     </div>
-                   )
+
+                          {/* Actions Row */}
+                          <div className="flex items-center gap-2 pt-2 border-t border-slate-50">
+                            <button
+                              onClick={() => handleToggleisActive(s)}
+                              disabled={togglingId === s._id}
+                              className="flex-1 py-1.5 rounded-lg bg-slate-50 text-slate-600 text-xs font-bold hover:bg-slate-100 transition flex items-center justify-center gap-1"
+                            >
+                              {togglingId === s._id ? (
+                                <Loader2 size={12} className="animate-spin" />
+                              ) : s.isActive ? (
+                                "Deactivate"
+                              ) : (
+                                "Activate"
+                              )}
+                            </button>
+                            <button
+                              onClick={() => {
+                                setSelectedStudent(s);
+                                setShowDeleteModal(true);
+                              }}
+                              className="p-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 transition"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
                 })}
               </div>
 
@@ -588,8 +627,7 @@ const StudentsPage = () => {
                   <thead className="bg-slate-50/80 text-slate-400 font-bold text-xs uppercase tracking-wider border-b border-slate-100 backdrop-blur-sm sticky top-0 z-10">
                     <tr>
                       <th className="px-4 py-4 text-center w-12">
-                         {/* Header checkbox handled in main header now */}
-                         #
+                        {/* Header checkbox handled in main header now */}#
                       </th>
                       <th className="px-6 py-4 text-left pl-4">Student</th>
                       <th className="px-6 py-4 text-left">Parent Info</th>
@@ -641,7 +679,9 @@ const StudentsPage = () => {
                               {s.parentName || "-"}
                             </div>
                             <div className="text-[10px] font-bold text-slate-400 uppercase mt-0.5">
-                              {s.monthlyFee ? `Fee: â‚¹${s.monthlyFee}` : "Fee: -"}
+                              {s.monthlyFee
+                                ? `Fee: â‚¹${s.monthlyFee}`
+                                : "Fee: -"}
                             </div>
                           </td>
 
@@ -679,10 +719,8 @@ const StudentsPage = () => {
                               }
                               className="p-2 rounded-lg hover:bg-white text-slate-400 hover:text-rose-600 hover:shadow-sm border border-transparent hover:border-slate-100 transition-all"
                               title={
-                                !s.isActive
-                                  ? "Mark Active"
-                                  : "Mark Inactive"
-                            }
+                                !s.isActive ? "Mark Active" : "Mark Inactive"
+                              }
                             >
                               {togglingId === s._id ? (
                                 <Loader2 size={16} className="animate-spin" />
@@ -731,7 +769,8 @@ const StudentsPage = () => {
                 Are you sure you want to delete{" "}
                 <span className="font-bold text-slate-800">
                   "{selectedStudent.name}"
-                </span>?
+                </span>
+                ?
                 <br />
                 This action cannot be undone.
               </p>
@@ -749,7 +788,7 @@ const StudentsPage = () => {
                     try {
                       await client.delete(`/students/${selectedStudent._id}`);
                       setStudents((prev) =>
-                        prev.filter((s) => s._id !== selectedStudent._id)
+                        prev.filter((s) => s._id !== selectedStudent._id),
                       );
                     } catch (err) {
                       setError("Failed to delete.");

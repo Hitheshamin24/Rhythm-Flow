@@ -273,7 +273,7 @@ const loadAttendance = async (dateObj = selectedDate, batchId = selectedBatchId)
 
   return (
     <div className="space-y-8 pb-10">
-      {/* --- HEADER --- */}
+      {/* HEADER */}
       <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-6">
         <div>
           <h2 className="text-2xl font-bold text-slate-900">Attendance</h2>
@@ -326,7 +326,7 @@ const loadAttendance = async (dateObj = selectedDate, batchId = selectedBatchId)
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* --- LEFT PANEL: Attendance Marking --- */}
+        {/* LEFT PANEL: Attendance Marking */}
         <div className="lg:col-span-2 bg-white rounded-3xl shadow-sm border border-slate-100 flex flex-col overflow-hidden h-[600px]">
           {/* Card Header */}
           <div className="px-6 py-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3 bg-slate-50/50">
@@ -500,7 +500,7 @@ const loadAttendance = async (dateObj = selectedDate, batchId = selectedBatchId)
           </div>
         </div>
 
-        {/* --- RIGHT PANEL: Absentees --- */}
+        {/* RIGHT PANEL: Absentees */}
         <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden flex flex-col h-fit">
           <div className="p-5 border-b border-slate-100 bg-slate-50/50">
             <h3 className="text-sm font-bold text-slate-800">Absentees List</h3>
