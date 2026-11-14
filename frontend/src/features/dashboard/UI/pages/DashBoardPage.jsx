@@ -1,187 +1,22 @@
-import { useEffect, useState, useMemo } from "react";
+import { useDashboard } from "../../hooks/useDashboard";
 import StatCard from "../components/StatCard";
-import client from "../../../../shared/api/client";
-import { getPayments } from "../../../payments/api/payments";
 import {
-  Users,
-  Banknote,
-  Calendar,
-  Activity,
-  MoreHorizontal,
-  ArrowUpRight,
-  Clock,
-  Briefcase,
-  CheckCircle2,
-  TrendingUp
+  Users, Banknote, Calendar, Activity,
+  ArrowUpRight, Clock, Briefcase, CheckCircle2,
 } from "lucide-react";
 import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
+  ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip,
 } from "recharts";
 
 const DashboardPage = () => {
-  const role = localStorage.getItem("role") || "owner";
-  const [students, setStudents] = useState([]);
-  const [batches, setBatches] = useState([]);
-  const [payments, setPayments] = useState({
-    total: 0,
-    paidCount: 0,
-    unpaidCount: 0,
-    paid: [],
-    unpaid: [],
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [attendanceStats, setAttendanceStats] = useState({
-    currentRate: 0, // this month
-    lastRate: 0, // previous month
-  });
-  const [weeklyAttendance, setWeeklyAttendance] = useState([]);
+  const {
+    role, loading, error,
+    totalStudents, activeStudents, feePercentage, monthlyRevenue,
+    payments, weeklyAttendance, recentPayments, upcomingClasses,
+    currentRate, diff, diffLabel,
+  } = useDashboard();
 
-  const loadStudents = async () => {
-    const res = await client.get("/students");
-    setStudents(res.data || []);
-  };
-
-  const loadBatches = async () => {
-    const res = await client.get("/batches");
-    setBatches(res.data || []);
-  };
-
-  const loadPayments = async () => {
-    const res = await getPayments();
-    setPayments(res.data || {});
-  };
-  const loadAttendanceSummary = async () => {
-    const res = await client.get("/attendance/summary");
-    // EXPECTED backend response:
-    // { currentRate: number, lastRate: number }
-    setAttendanceStats({
-      currentRate: res.data?.currentRate || 0,
-      lastRate: res.data?.lastRate || 0,
-    });
-  };
-
-  useEffect(() => {
-    const fetchAll = async () => {
-      try {
-        setLoading(true);
-        setError("");
-        await Promise.all([
-          loadStudents(),
-          loadBatches(),
-          loadPayments(),
-          loadAttendanceSummary(),
-          loadWeeklyAttendance(),
-        ]);
-      } catch (err) {
-        console.error(err);
-        setError(
-          err.response?.data?.message || "Failed to load dashboard data."
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchAll();
-  }, []);
-
-  const feePercentage = payments.total
-    ? Math.round((payments.paidCount / payments.total) * 100)
-    : 0;
-
-  const totalStudents = students.length;
-  const activeStudents = useMemo(
-    () => students.filter((s) => s.isActive).length,
-    [students]
-  );
-
-  const attendanceRate = totalStudents
-    ? Math.round((activeStudents / totalStudents) * 100)
-    : 0;
-  
-  const loadWeeklyAttendance = async () => {
-    const res = await client.get("/attendance/weekly");
-    setWeeklyAttendance(res.data || []);
-  };
-
-  const monthlyRevenue = useMemo(() => {
-    const paidList = payments.paid || [];
-    return paidList.reduce(
-      (sum, s) => sum + (s.monthlyFee ? Number(s.monthlyFee) : 0),
-      0
-    );
-  }, [payments]);
-
-  const recentPayments = useMemo(() => {
-    const paidList = payments.paid || [];
-    const sorted = [...paidList].sort((a, b) => {
-      const da = a.lastPaidDate ? new Date(a.lastPaidDate) : 0;
-      const db = b.lastPaidDate ? new Date(b.lastPaidDate) : 0;
-      return db - da; // latest first
-    });
-
-    return sorted.slice(0, 3).map((s) => {
-      const dateStr = s.lastPaidDate
-        ? new Date(s.lastPaidDate).toLocaleString("en-IN", {
-            day: "2-digit",
-            month: "short",
-            hour: "2-digit",
-            minute: "2-digit",
-          })
-        : "Date not set";
-
-      return {
-        name: s.name,
-        amount: s.monthlyFee
-          ? `+ ₹${Number(s.monthlyFee).toLocaleString("en-IN")}`
-          : "Paid",
-        date: dateStr,
-        status: "success",
-      };
-    });
-  }, [payments]);
-
-  const upcomingClasses = useMemo(() => {
-    if (!batches.length) return [];
-
-    const todayIndex = new Date().getDay();
-    const daysMap = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    const todayStr = daysMap[todayIndex];
-
-    return (
-      batches
-        .filter((b) => b.days && b.days.includes(todayStr))
-        .map((b) => {
-          const count = students.filter(
-            (s) => String(s.batch || "") === String(b._id)
-          ).length;
-
-          return {
-            time: b.timing || "—",
-            title: b.name,
-            instructor: "Studio Batch", // you can later map to real instructor
-            students: count,
-          };
-        })
-        // optionally sort by time (strings)
-        .sort((a, b) => a.time.localeCompare(b.time))
-        .slice(0, 4)
-    );
-  }, [batches, students]);
-  const { currentRate, lastRate } = attendanceStats;
-  const diff = currentRate - lastRate;
-  const diffLabel =
-    diff === 0
-      ? "No change vs last month"
-      : `${diff > 0 ? "+" : ""}${diff.toFixed(1)}% vs last month`;
-
-  return (
-    // Applied Warm Background: bg-[#FFFBF7] matches the image's cream background
+  return (    // Applied Warm Background: bg-[#FFFBF7] matches the image's cream background
     <div className="space-y-8 pb-10 bg-[#FFFBF7] min-h-screen p-6 md:p-8 font-sans text-stone-800">
       {/* Header */}
    
@@ -473,4 +308,5 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
+
 

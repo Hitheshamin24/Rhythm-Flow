@@ -1,236 +1,18 @@
-import { useEffect, useState, useMemo } from "react";
-import client from "../../../../shared/api/client";
-import { getSettings } from "../../../settings/api/settings";
-
+import { useStudents } from "../../hooks/useStudents";
 import {
-  User,
-  Phone,
-  IndianRupee,
-  Plus,
-  Search,
-  Trash2,
-  AlertTriangle,
-  Loader2,
-  X,
-  Check,
-  CheckSquare,
+  User, Phone, IndianRupee, Plus, Search, Trash2, AlertTriangle, Loader2, X, Check, CheckSquare,
 } from "lucide-react";
 
 const StudentsPage = () => {
-  const [students, setStudents] = useState([]);
-  const [batches, setBatches] = useState([]);
-
-  const [loading, setLoading] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [deletingId, setDeletingId] = useState(null);
-  const [error, setError] = useState("");
-
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const [form, setForm] = useState({
-    name: "",
-    parentName: "",
-    phone: "",
-    email: "",
-    monthlyFee: "",
-    batch: "",
-  });
-
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [selectedStudent, setSelectedStudent] = useState(null);
-  const [togglingId, setTogglingId] = useState(null);
-
-  // NEW: global batch selection + checklist state
-  const [selectedBatch, setSelectedBatch] = useState("");
-  const [selectedIds, setSelectedIds] = useState([]); // student ids
-  const [updatingBatch, setUpdatingBatch] = useState(false);
-
-  const getBatchLabel = (batchId) => {
-    if (!batchId) return "No batch";
-    const b = batches.find((x) => x._id === batchId);
-    if (!b) return "No batch";
-    return b.timing ? `${b.name} (${b.timing})` : b.name;
-  };
-
-  const handleToggleisActive = async (student) => {
-    try {
-      setTogglingId(student._id);
-      setError("");
-
-      // optimistic
-      setStudents((prev) =>
-        prev.map((s) =>
-          s._id === student._id ? { ...s, isActive: !Boolean(s.isActive) } : s,
-        ),
-      );
-
-      await client.put(`/students/${student._id}`, {
-        isActive: !Boolean(student.isActive),
-      });
-    } catch (err) {
-      // rollback
-      setStudents((prev) =>
-        prev.map((s) =>
-          s._id === student._id
-            ? { ...s, isActive: Boolean(student.isActive) }
-            : s,
-        ),
-      );
-      setError(err.response?.data?.message || "Failed to update status.");
-    } finally {
-      setTogglingId(null);
-    }
-  };
-
-  const loadStudents = async () => {
-    try {
-      setLoading(true);
-      setError("");
-      const res = await client.get("/students");
-      setStudents(res.data);
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to load students.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadBatches = async () => {
-    try {
-      const res = await client.get("/batches");
-      setBatches(res.data);
-    } catch (err) {
-      console.error("Failed to load batches", err);
-    }
-  };
-
-  useEffect(() => {
-    loadStudents();
-    loadBatches();
-    loadDefaultFee();
-  }, []);
-  const loadDefaultFee = async () => {
-    try {
-      const res = await getSettings();
-      const defaultFee = res.data?.defaultMonthlyFee || 0;
-
-      setForm((prev) => ({
-        ...prev,
-        monthlyFee: defaultFee ? String(defaultFee) : "",
-      }));
-    } catch (err) {
-      console.log("Default fee not loaded");
-    }
-  };
-
-  const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!form.name.trim()) return;
-
-    try {
-      setSaving(true);
-      setError("");
-
-      await client.post("/students", {
-        ...form,
-        monthlyFee: form.monthlyFee ? Number(form.monthlyFee) : 0,
-        batch: form.batch || undefined,
-      });
-
-      // SAFE RESET WITHOUT res
-      setForm((prev) => ({
-        name: "",
-        parentName: "",
-        phone: "",
-        email: "",
-        monthlyFee: prev.monthlyFee, // keep default fee
-        batch: "",
-      }));
-
-      loadStudents();
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to add student.");
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const toggleSelectStudent = (id) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
-    );
-  };
-
-  const toggleSelectAllVisible = () => {
-    const visibleIds = sortedStudents.map((s) => s._id);
-    const allSelected = visibleIds.every((id) => selectedIds.includes(id));
-    if (allSelected) {
-      // unselect all visible
-      setSelectedIds((prev) => prev.filter((id) => !visibleIds.includes(id)));
-    } else {
-      // add all visible
-      setSelectedIds((prev) => [...new Set([...prev, ...visibleIds])]);
-    }
-  };
-
-  const handleApplyBatch = async () => {
-    if (!selectedBatch || selectedIds.length === 0) return;
-
-    try {
-      setUpdatingBatch(true);
-      setError("");
-
-      // optimistic UI
-      setStudents((prev) =>
-        prev.map((s) =>
-          selectedIds.includes(s._id) ? { ...s, batch: selectedBatch } : s,
-        ),
-      );
-
-      // sequential calls to existing single-student endpoint
-      for (const id of selectedIds) {
-        await client.put(`/students/${id}`, { batch: selectedBatch });
-      }
-
-      // clear selection after success
-      setSelectedIds([]);
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to update batch.");
-      // reload to be safe
-      loadStudents();
-    } finally {
-      setUpdatingBatch(false);
-    }
-  };
-
-  const filteredStudents = students.filter(
-    (s) =>
-      s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (s.parentName &&
-        s.parentName.toLowerCase().includes(searchTerm.toLowerCase())),
-  );
-
-  const sortedStudents = [...filteredStudents].sort((a, b) =>
-    a.name.localeCompare(b.name),
-  );
-
-  const activeCount = useMemo(
-    () => students.filter((s) => Boolean(s.isActive)).length,
-    [students],
-  );
-
-  const inactiveCount = useMemo(
-    () => students.length - activeCount,
-    [students, activeCount],
-  );
-
-  const allVisibleSelected =
-    sortedStudents.length > 0 &&
-    sortedStudents.every((s) => selectedIds.includes(s._id));
-
+  const {
+    batches, loading, saving, deletingId, togglingId, error,
+    searchTerm, setSearchTerm, form, handleChange, handleSubmit,
+    showDeleteModal, setShowDeleteModal, selectedStudent, setSelectedStudent,
+    selectedBatch, setSelectedBatch, selectedIds, updatingBatch,
+    sortedStudents, activeCount, inactiveCount, allVisibleSelected,
+    handleToggleisActive, handleDeleteStudent,
+    toggleSelectStudent, toggleSelectAllVisible, handleApplyBatch, getBatchLabel,
+  } = useStudents();
   return (
     <div className="space-y-6 md:space-y-8 pb-20 md:pb-10">
       {/* --- HEADER --- */}
@@ -783,24 +565,15 @@ const StudentsPage = () => {
                   Cancel
                 </button>
                 <button
-                  onClick={async () => {
-                    setDeletingId(selectedStudent._id);
-                    try {
-                      await client.delete(`/students/${selectedStudent._id}`);
-                      setStudents((prev) =>
-                        prev.filter((s) => s._id !== selectedStudent._id),
-                      );
-                    } catch (err) {
-                      setError("Failed to delete.");
-                    } finally {
-                      setShowDeleteModal(false);
-                      setDeletingId(null);
-                      setSelectedStudent(null);
-                    }
-                  }}
-                  className="flex-1 py-3 rounded-xl bg-rose-600 text-white font-bold text-sm hover:bg-rose-700 shadow-lg shadow-rose-500/20 transition"
+                  onClick={handleDeleteStudent}
+                  disabled={deletingId === selectedStudent._id}
+                  className="flex-1 py-3 rounded-xl bg-rose-600 text-white font-bold text-sm hover:bg-rose-700 shadow-lg shadow-rose-500/20 transition flex items-center justify-center gap-2 disabled:opacity-50"
                 >
-                  Delete
+                  {deletingId === selectedStudent._id ? (
+                    <Loader2 size={16} className="animate-spin" />
+                  ) : (
+                    "Delete"
+                  )}
                 </button>
               </div>
             </div>
@@ -812,4 +585,5 @@ const StudentsPage = () => {
 };
 
 export default StudentsPage;
+
 

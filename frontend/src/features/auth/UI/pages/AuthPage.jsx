@@ -1,25 +1,11 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  login,
-  registerStudio,
-  requestPasswordOtp,
-  resetPasswordWithOtp,
-  verifyEmailOtp,
-  staffLogin,
-  staffRegister,
-  getStudiosList,
-  staffRequestPasswordOtp,
-  staffResetPasswordWithOtp,
-} from "../../api/auth";
-
+import { useAuth } from "../../hooks/useAuth";
+import { InputGroup, ModalOverlay } from "../components";
 import {
   User,
   Mail,
   Lock,
   Loader2,
   ArrowRight,
-  X,
   Phone,
   ChevronDown,
   Building2,
@@ -28,312 +14,60 @@ import {
 import image from "../../../../assets/danceapp.png";
 
 const AuthPage = () => {
-  // "owner" | "trainer"
-  const [userType, setUserType] = useState("owner");
-  // "login" | "register"
-  const [mode, setMode] = useState("login");
-
-  // Owner form fields
-  const [className, setClassName] = useState("");
-
-  // Shared fields
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
-  const [show, setShow] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  // Trainer-specific fields
-  const [trainerName, setTrainerName] = useState("");
-  const [selectedStudioId, setSelectedStudioId] = useState("");
-  const [studios, setStudios] = useState([]);
-  const [studiosLoading, setStudiosLoading] = useState(false);
-
-  const [showForgotModal, setShowForgotModal] = useState(false);
-  const [fpStep, setFpStep] = useState("request"); // "request" | "verify"
-  const [fpInput, setFpInput] = useState("");
-  const [fpClassName, setFpClassName] = useState("");
-  const [fpEmail, setFpEmail] = useState("");
-  const [fpPhone, setFpPhone] = useState("");
-  const [fpOtp, setFpOtp] = useState(new Array(6).fill(""));
-  const [fpNewPassword, setFpNewPassword] = useState("");
-  const [fpConfirmPassword, setFpConfirmPassword] = useState("");
-  const [fpLoading, setFpLoading] = useState(false);
-  const [fpMessage, setFpMessage] = useState("");
-  const [fpError, setFpError] = useState("");
-
-  const [showVerifyModal, setShowVerifyModal] = useState(false);
-  const [verifyOtp, setVerifyOtp] = useState(new Array(6).fill(""));
-  const [verifyLoading, setVerifyLoading] = useState(false);
-  const [verifyError, setVerifyError] = useState("");
-  const [verifyMessage, setVerifyMessage] = useState("");
-
-  const [registeredClassName, setRegisteredClassName] = useState("");
-  const [registeredEmail, setRegisteredEmail] = useState("");
-
-  const navigate = useNavigate();
-
-  // Fetch studios list when trainer registration is active
-  useEffect(() => {
-    if (userType === "trainer" && mode === "register") {
-      setStudiosLoading(true);
-      getStudiosList()
-        .then((res) => setStudios(res.data || []))
-        .catch(() => setStudios([]))
-        .finally(() => setStudiosLoading(false));
-    }
-  }, [userType, mode]);
-
-  // Reset form when userType or mode changes
-  useEffect(() => {
-    setError("");
-    setEmail("");
-    setPassword("");
-    setClassName("");
-    setPhone("");
-    setTrainerName("");
-    setSelectedStudioId("");
-  }, [userType, mode]);
-
-  const handleOtpChange = (element, index, setOtpState) => {
-    if (isNaN(element.value)) return false;
-    setOtpState((prevOtp) => {
-      const newOtp = [...prevOtp];
-      newOtp[index] = element.value;
-      return newOtp;
-    });
-    if (element.value && element.nextSibling) {
-      element.nextSibling.focus();
-    }
-  };
-
-  const handleOtpKeyDown = (e, index, setOtpState) => {
-    if (e.key === "Backspace") {
-      setOtpState((prevOtp) => {
-        const newOtp = [...prevOtp];
-        if (!newOtp[index] && index > 0 && e.target.previousSibling) {
-          e.target.previousSibling.focus();
-        }
-        newOtp[index] = "";
-        return newOtp;
-      });
-      if (!e.target.value && index > 0 && e.target.previousSibling) {
-        e.target.previousSibling.focus();
-      }
-    }
-  };
-
-  const handleOtpPaste = (e, setOtpState) => {
-    e.preventDefault();
-    const data = e.clipboardData.getData("text").slice(0, 6).split("");
-    if (data.length > 0) {
-      setOtpState((prev) => {
-        const newOtp = [...prev];
-        data.forEach((char, i) => {
-          if (i < 6 && !isNaN(char)) newOtp[i] = char;
-        });
-        return newOtp;
-      });
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-
-    try {
-      if (userType === "owner") {
-        // Studio Owner flow
-        if (mode === "login") {
-          const response = await login(className, password);
-          const data = response.data;
-
-          if (data.requiresVerification) {
-            setRegisteredClassName(className);
-            setRegisteredEmail(data.studio?.email || "");
-            setError("");
-            setShowVerifyModal(true);
-            return;
-          }
-
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("studioName", data.studio.className);
-          localStorage.setItem("role", "owner");
-          navigate("/dashboard");
-        } else {
-          await registerStudio(className, email, password, phone);
-          setRegisteredClassName(className);
-          setRegisteredEmail(email);
-          setError("");
-          setShowVerifyModal(true);
-        }
-      } else {
-        // Trainer flow
-        if (mode === "login") {
-          const response = await staffLogin(email, password);
-          const data = response.data;
-
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("studioName", data.staff.name);
-          localStorage.setItem("role", "trainer");
-          navigate("/dashboard");
-        } else {
-          if (!selectedStudioId) {
-            setError("Please select the studio you belong to.");
-            return;
-          }
-          await staffRegister(trainerName, email, password, selectedStudioId);
-          setError("");
-          // Show a success message instead of navigating
-          setMode("login");
-          setError(""); // Reuse error field as info — or use a dedicated state
-          // We'll show a toast-like message via error field (green style handled below)
-          setRegisteredEmail("pending");
-        }
-      }
-    } catch (err) {
-      const msg = err.response?.data?.message || "Something went wrong.";
-      setError(msg);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const detectInputType = (input) => {
-    const value = input.trim();
-    if (value.includes("@")) return "email";
-    if (/^\d+$/.test(value) && value.length > 6) return "phone";
-    return "className";
-  };
-
-  const handleForgotSubmit = async (e) => {
-    e.preventDefault();
-    setFpMessage("");
-    setFpError("");
-    setFpLoading(true);
-
-    const otpString = fpOtp.join("");
-
-    try {
-      if (fpStep === "request") {
-        if (!fpInput) {
-          setFpError("Please enter your registered details.");
-          setFpLoading(false);
-          return;
-        }
-
-        const type = detectInputType(fpInput);
-        const payload = { className: "", email: "", phone: "" };
-
-        setFpClassName("");
-        setFpEmail("");
-        setFpPhone("");
-
-        if (type === "email") {
-          payload.email = fpInput;
-          setFpEmail(fpInput);
-        } else if (type === "phone") {
-          payload.phone = fpInput;
-          setFpPhone(fpInput);
-        } else {
-          payload.className = fpInput;
-          setFpClassName(fpInput);
-        }
-
-        let res;
-        if (userType === "owner") {
-          res = await requestPasswordOtp(payload);
-        } else {
-          res = await staffRequestPasswordOtp({ email: fpInput });
-        }
-        setFpMessage(res.data?.message || "OTP sent to registered details.");
-        setFpStep("verify");
-      } else {
-        if (fpNewPassword !== fpConfirmPassword) {
-          setFpError("Passwords do not match.");
-          setFpLoading(false);
-          return;
-        }
-
-        let res;
-        if (userType === "owner") {
-          res = await resetPasswordWithOtp({
-            className: fpClassName,
-            email: fpEmail,
-            phone: fpPhone,
-            otp: otpString,
-            newPassword: fpNewPassword,
-          });
-        } else {
-          res = await staffResetPasswordWithOtp({
-            email: fpInput,
-            otp: otpString,
-            newPassword: fpNewPassword,
-          });
-        }
-
-        setFpMessage(res.data?.message || "Password reset successful.");
-        setTimeout(() => setShowForgotModal(false), 1500);
-      }
-    } catch (err) {
-      setFpError(err.response?.data?.message || "Failed to process request.");
-    } finally {
-      setFpLoading(false);
-    }
-  };
-
-  const openForgotModal = () => {
-    const prefill = email || phone || className || "";
-    setFpInput(prefill);
-    setFpOtp(new Array(6).fill(""));
-    setFpNewPassword("");
-    setFpConfirmPassword("");
-    setFpMessage("");
-    setFpError("");
-    setFpStep("request");
-    setShowForgotModal(true);
-  };
-
-  const handleVerifyEmail = async (e) => {
-    e.preventDefault();
-    setVerifyError("");
-    setVerifyMessage("");
-    setVerifyLoading(true);
-
-    const otpString = verifyOtp.join("");
-
-    try {
-      const res = await verifyEmailOtp({
-        className: registeredClassName,
-        email: registeredEmail,
-        otp: otpString,
-      });
-
-      const data = res.data;
-      setVerifyMessage(data.message || "Email verified!");
-
-      if (data.token && data.studio) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("studioName", data.studio.className);
-        localStorage.setItem("role", "owner");
-        setTimeout(() => {
-          setShowVerifyModal(false);
-          navigate("/dashboard");
-        }, 800);
-      }
-    } catch (err) {
-      setVerifyError(err.response?.data?.message || "Verification failed.");
-    } finally {
-      setVerifyLoading(false);
-    }
-  };
-
-  // Detect if "error" state is actually a success notice (trainer registration)
-  const isSuccessNotice =
-    userType === "trainer" && registeredEmail === "pending" && !error;
-
+  const {
+    userType,
+    setUserType,
+    mode,
+    setMode,
+    className,
+    setClassName,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    phone,
+    setPhone,
+    show,
+    setShow,
+    loading,
+    error,
+    trainerName,
+    setTrainerName,
+    selectedStudioId,
+    setSelectedStudioId,
+    studios,
+    studiosLoading,
+    showForgotModal,
+    setShowForgotModal,
+    fpStep,
+    fpInput,
+    setFpInput,
+    fpOtp,
+    setFpOtp,
+    fpNewPassword,
+    setFpNewPassword,
+    fpConfirmPassword,
+    setFpConfirmPassword,
+    fpLoading,
+    fpMessage,
+    fpError,
+    showVerifyModal,
+    setShowVerifyModal,
+    verifyOtp,
+    setVerifyOtp,
+    verifyLoading,
+    verifyError,
+    verifyMessage,
+    registeredEmail,
+    handleOtpChange,
+    handleOtpKeyDown,
+    handleOtpPaste,
+    handleSubmit,
+    openForgotModal,
+    handleForgotSubmit,
+    handleVerifyEmail,
+    isSuccessNotice,
+  } = useAuth();
   return (
     <div className="grid place-items-center min-h-[100dvh] w-full bg-[#1F1216] relative overflow-x-hidden px-4 py-8 font-sans selection:bg-rose-500/30">
       {/* Background Ambience */}
@@ -742,38 +476,5 @@ const AuthPage = () => {
     </div>
   );
 };
-
-
-const InputGroup = ({ icon: Icon, type = "text", placeholder, value, onChange }) => (
-  <div className="relative group">
-    <Icon
-      className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-rose-600 transition-colors"
-      size={18}
-    />
-    <input
-      type={type}
-      className="w-full bg-slate-50/50 hover:bg-slate-50 focus:bg-white rounded-xl border border-slate-200 pl-11 pr-4 py-3.5 text-sm outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all placeholder:text-slate-400 text-slate-800 font-medium"
-      placeholder={placeholder}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      required
-    />
-  </div>
-);
-
-const ModalOverlay = ({ children, onClose }) => (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1F1216]/60 backdrop-blur-sm px-4 animate-in fade-in duration-200">
-    <div className="bg-white rounded-[20px] w-full max-w-sm shadow-2xl border border-white/40 p-6 md:p-8 relative animate-in zoom-in-95 slide-in-from-bottom-4 duration-300">
-      <button
-        onClick={onClose}
-        className="absolute right-4 top-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 p-1.5 rounded-full transition-all"
-      >
-        <X size={16} />
-      </button>
-      {children}
-    </div>
-  </div>
-);
-
 export default AuthPage;
 
