@@ -1,19 +1,19 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 
 // Pages
-import AuthPage from "../pages/AuthPage";
-import DashBoardPage from "../pages/DashBoardPage";
-import StudentsPage from "../pages/StudentsPage";
-import AttendancePage from "../pages/AttendancePage";
-import PaymentsPage from "../pages/PaymentsPage";
-import FinancePage from "../pages/FinancePage";
-import BatchesPage from "../pages/BatchesPage";
-import SettingsPage from "../pages/SettingPage";
-import TrainerApprovalsPage from "../pages/TrainerApprovalsPage";
+import AuthPage from "../features/auth/UI/pages/AuthPage";
+import DashBoardPage from "../features/dashboard/UI/pages/DashBoardPage";
+import StudentsPage from "../features/students/UI/pages/StudentsPage";
+import AttendancePage from "../features/attendance/UI/pages/AttendancePage";
+import PaymentsPage from "../features/payments/UI/pages/PaymentsPage";
+import FinancePage from "../features/finance/UI/pages/FinancePage";
+import BatchesPage from "../features/batches/UI/pages/BatchesPage";
+import SettingsPage from "../features/settings/UI/pages/SettingPage";
+import TrainerApprovalsPage from "../features/staff/UI/pages/TrainerApprovalsPage";
 
 // Layouts
-import AuthLayout from "../layouts/AuthLayout";
-import DashBoardLayout from "../layouts/DashBoardLayout";
+import AuthLayout from "../shared/layouts/AuthLayout";
+import DashBoardLayout from "../shared/layouts/DashBoardLayout";
 
 // Route Guards
 import PublicRoute from "./PublicRoute";
@@ -86,3 +86,4 @@ const AppRoutes = () => {
 };
 
 export default AppRoutes;
+
