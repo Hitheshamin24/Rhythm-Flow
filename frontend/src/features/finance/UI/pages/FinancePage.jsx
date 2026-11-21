@@ -42,6 +42,7 @@ const FinancePage = () => {
     toggleConfirm,
     setToggleConfirm,
     selectedMonth,
+    setSelectedMonth,
     error,
     monthsRange,
     handleMonthChange,
