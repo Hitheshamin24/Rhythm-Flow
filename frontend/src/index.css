@@ -1,5 +1,411 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:is(.dark *));
+
+/* ── Dark (default) theme tokens ── */
+:root {
+  --color-background: #1b1017;
+  --color-surface: #1b1017;
+  --color-surface-dim: #1b1017;
+  --color-surface-bright: #43353d;
+  --color-surface-container-lowest: #160b12;
+  --color-surface-container-low: #24181f;
+  --color-surface-container: #281c23;
+  --color-surface-container-high: #33262e;
+  --color-surface-container-highest: #3f3139;
+  --color-on-surface: #f3dde7;
+  --color-on-surface-variant: #e0bec6;
+  --color-outline: #a88990;
+  --color-outline-variant: #594047;
+  --color-primary: #ffb1c7;
+  --color-primary-fixed: #ffd9e2;
+  --color-primary-fixed-dim: #ffb1c7;
+  --color-on-primary: #650032;
+  --color-on-primary-fixed: #3e001d;
+  --color-on-primary-fixed-variant: #8e0049;
+  --color-primary-container: #ff4995;
+  --color-on-primary-container: #58002b;
+  --color-inverse-primary: #b90062;
+  --color-secondary: #ffb0cd;
+  --color-secondary-fixed: #ffd9e5;
+  --color-secondary-fixed-dim: #ffb0cd;
+  --color-on-secondary: #64003a;
+  --color-on-secondary-fixed: #3e0022;
+  --color-on-secondary-fixed-variant: #890d53;
+  --color-secondary-container: #8c1155;
+  --color-on-secondary-container: #ff99c2;
+  --color-tertiary: #ffafd3;
+  --color-tertiary-fixed: #ffd8e7;
+  --color-tertiary-fixed-dim: #ffafd3;
+  --color-on-tertiary: #56193b;
+  --color-on-tertiary-fixed: #3b0225;
+  --color-on-tertiary-fixed-variant: #713052;
+  --color-tertiary-container: #c8789e;
+  --color-on-tertiary-container: #4e1234;
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+  --color-on-error: #690005;
+  --color-on-error-container: #ffdad6;
+  --color-surface-variant: #3f3139;
+  --color-inverse-surface: #f3dde7;
+  --color-inverse-on-surface: #3a2d34;
+  --color-surface-tint: #ffb1c7;
+}
+
+/* ── Light theme tokens ── */
+.light {
+  --color-background: #fff5f7;
+  --color-surface: #fff5f7;
+  --color-surface-dim: #e8d6de;
+  --color-surface-bright: #fff5f7;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #fceef4;
+  --color-surface-container: #f6e8ee;
+  --color-surface-container-high: #f0e2e9;
+  --color-surface-container-highest: #eadce3;
+  --color-on-surface: #221218;
+  --color-on-surface-variant: #534049;
+  --color-outline: #857077;
+  --color-outline-variant: #d9bec5;
+  --color-primary: #b90062;
+  --color-primary-fixed: #ffd9e2;
+  --color-primary-fixed-dim: #ffb1c7;
+  --color-on-primary: #ffffff;
+  --color-on-primary-fixed: #3e001d;
+  --color-on-primary-fixed-variant: #8e0049;
+  --color-primary-container: #ff4995;
+  --color-on-primary-container: #ffffff;
+  --color-inverse-primary: #ffb1c7;
+  --color-secondary: #8c1155;
+  --color-secondary-fixed: #ffd9e5;
+  --color-secondary-fixed-dim: #ffb0cd;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-fixed: #3e0022;
+  --color-on-secondary-fixed-variant: #890d53;
+  --color-secondary-container: #ffd8e5;
+  --color-on-secondary-container: #3b0021;
+  --color-tertiary: #7d2f56;
+  --color-tertiary-fixed: #ffd8e7;
+  --color-tertiary-fixed-dim: #ffafd3;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-fixed: #3b0225;
+  --color-on-tertiary-fixed-variant: #713052;
+  --color-tertiary-container: #ffd8e7;
+  --color-on-tertiary-container: #330d27;
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-on-error: #ffffff;
+  --color-on-error-container: #410002;
+  --color-surface-variant: #f2dde4;
+  --color-inverse-surface: #382029;
+  --color-inverse-on-surface: #fceef4;
+  --color-surface-tint: #b90062;
+}
+
+@theme {
+  /* ── Font families ── */
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-mono: ui-monospace, monospace;
+
+  /* ── Font sizes (MD3 type scale) ── */
+  --text-label-sm: 10px;
+  --text-label-md: 12px;
+  --text-label-lg: 14px;
+  --text-body-sm: 12px;
+  --text-body-md: 14px;
+  --text-body-lg: 16px;
+  --text-headline-sm: 18px;
+  --text-headline-md: 22px;
+  --text-headline-lg: 28px;
+  --text-headline-xl: 36px;
+  --text-display: 48px;
+
+
+  --color-background: var(--color-background);
+  --color-surface: var(--color-surface);
+  --color-surface-dim: var(--color-surface-dim);
+  --color-surface-bright: var(--color-surface-bright);
+  --color-surface-container-lowest: var(--color-surface-container-lowest);
+  --color-surface-container-low: var(--color-surface-container-low);
+  --color-surface-container: var(--color-surface-container);
+  --color-surface-container-high: var(--color-surface-container-high);
+  --color-surface-container-highest: var(--color-surface-container-highest);
+  --color-on-surface: var(--color-on-surface);
+  --color-on-surface-variant: var(--color-on-surface-variant);
+  --color-outline: var(--color-outline);
+  --color-outline-variant: var(--color-outline-variant);
+  --color-primary: var(--color-primary);
+  --color-primary-fixed: var(--color-primary-fixed);
+  --color-primary-fixed-dim: var(--color-primary-fixed-dim);
+  --color-on-primary: var(--color-on-primary);
+  --color-on-primary-fixed: var(--color-on-primary-fixed);
+  --color-on-primary-fixed-variant: var(--color-on-primary-fixed-variant);
+  --color-primary-container: var(--color-primary-container);
+  --color-on-primary-container: var(--color-on-primary-container);
+  --color-inverse-primary: var(--color-inverse-primary);
+  --color-secondary: var(--color-secondary);
+  --color-secondary-fixed: var(--color-secondary-fixed);
+  --color-secondary-fixed-dim: var(--color-secondary-fixed-dim);
+  --color-on-secondary: var(--color-on-secondary);
+  --color-on-secondary-fixed: var(--color-on-secondary-fixed);
+  --color-on-secondary-fixed-variant: var(--color-on-secondary-fixed-variant);
+  --color-secondary-container: var(--color-secondary-container);
+  --color-on-secondary-container: var(--color-on-secondary-container);
+  --color-tertiary: var(--color-tertiary);
+  --color-tertiary-fixed: var(--color-tertiary-fixed);
+  --color-tertiary-fixed-dim: var(--color-tertiary-fixed-dim);
+  --color-on-tertiary: var(--color-on-tertiary);
+  --color-on-tertiary-fixed: var(--color-on-tertiary-fixed);
+  --color-on-tertiary-fixed-variant: var(--color-on-tertiary-fixed-variant);
+  --color-tertiary-container: var(--color-tertiary-container);
+  --color-on-tertiary-container: var(--color-on-tertiary-container);
+  --color-error: var(--color-error);
+  --color-error-container: var(--color-error-container);
+  --color-on-error: var(--color-on-error);
+  --color-on-error-container: var(--color-on-error-container);
+  --color-surface-variant: var(--color-surface-variant);
+  --color-inverse-surface: var(--color-inverse-surface);
+  --color-inverse-on-surface: var(--color-inverse-on-surface);
+  --color-surface-tint: var(--color-surface-tint);
+}
+
+/* ── Global base ── */
+*, *::before, *::after {
+  transition-property: background-color, border-color, color;
+  transition-duration: 250ms;
+  transition-timing-function: ease;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-on-surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Scrollbar hide ── */
+::-webkit-scrollbar { display: none; }
+* { scrollbar-width: none; }
+
+/* ── Typography Classes matching MD3 / Design Template ── */
+.font-label-sm, .text-label-sm { font-family: 'Space Grotesk', sans-serif; font-size: 10px; line-height: 14px; letter-spacing: 0.06em; font-weight: 600; }
+.font-label-md, .text-label-md { font-family: 'Space Grotesk', sans-serif; font-size: 12px; line-height: 16px; letter-spacing: 0.04em; font-weight: 500; }
+.font-label-lg, .text-label-lg { font-family: 'Space Grotesk', sans-serif; font-size: 14px; line-height: 20px; letter-spacing: 0.02em; font-weight: 600; }
+
+.font-body-sm, .text-body-sm { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; line-height: 18px; font-weight: 400; }
+.font-body-md, .text-body-md { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; line-height: 22px; font-weight: 400; }
+.font-body-lg, .text-body-lg { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; line-height: 24px; font-weight: 400; }
+
+.font-headline-sm, .text-headline-sm { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; line-height: 26px; font-weight: 600; }
+.font-headline-md, .text-headline-md { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; line-height: 30px; font-weight: 600; }
+.font-headline-lg, .text-headline-lg { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 28px; line-height: 36px; letter-spacing: -0.01em; font-weight: 600; }
+.font-headline-xl, .text-headline-xl { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 36px; line-height: 44px; letter-spacing: -0.015em; font-weight: 700; }
+.font-display-hero, .text-display-hero { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 48px; line-height: 56px; letter-spacing: -0.02em; font-weight: 700; }
+
+/* ══════════════════════════════════════════════════════════════════════
+   DARK THEME COMPONENT & TITLE ADAPTATIONS
+   In dark mode, ensure titles, descriptions, and white cards render
+   cleanly with luminous legible text.
+   In light mode, none of these rules apply, keeping previous styling intact.
+══════════════════════════════════════════════════════════════════════ */
+.dark .text-slate-900,
+.dark .text-slate-800,
+.dark .text-slate-700,
+.dark .text-stone-900,
+.dark .text-stone-800,
+.dark .text-stone-700 {
+  color: #f3dde7 !important;
+}
+
+.dark .text-slate-600,
+.dark .text-slate-500,
+.dark .text-stone-600,
+.dark .text-stone-500 {
+  color: #e0bec6 !important;
+}
+
+.dark .text-slate-400,
+.dark .text-stone-400 {
+  color: #a88990 !important;
+}
+
+.dark .bg-white {
+  background-color: #24181f !important;
+  color: #f3dde7;
+}
+
+.dark .bg-slate-50,
+.dark .bg-slate-50\/80,
+.dark .bg-slate-50\/50,
+.dark .bg-slate-50\/30,
+.dark .bg-stone-50,
+.dark .bg-stone-50\/80,
+.dark .bg-stone-50\/50,
+.dark .bg-stone-50\/30 {
+  background-color: #281c23 !important;
+}
+
+.dark .bg-slate-100,
+.dark .bg-stone-100 {
+  background-color: #33262e !important;
+}
+
+/* ── Dark Status Badges & Pills (Paid, Pending, Due, Absentees) ── */
+.dark .bg-emerald-50,
+.dark .bg-emerald-50\/50,
+.dark .bg-emerald-50\/30 {
+  background-color: rgba(16, 185, 129, 0.15) !important;
+}
+.dark .bg-emerald-100 {
+  background-color: rgba(16, 185, 129, 0.25) !important;
+}
+.dark .border-emerald-100,
+.dark .border-emerald-200 {
+  border-color: rgba(16, 185, 129, 0.3) !important;
+}
+.dark .text-emerald-900,
+.dark .text-emerald-800,
+.dark .text-emerald-700 {
+  color: #6ee7b7 !important;
+}
+.dark .text-emerald-600 {
+  color: #34d399 !important;
+}
+
+.dark .bg-amber-50,
+.dark .bg-amber-50\/50,
+.dark .bg-amber-50\/30 {
+  background-color: rgba(245, 158, 11, 0.15) !important;
+}
+.dark .bg-amber-100 {
+  background-color: rgba(245, 158, 11, 0.25) !important;
+}
+.dark .border-amber-100,
+.dark .border-amber-200 {
+  border-color: rgba(245, 158, 11, 0.3) !important;
+}
+.dark .text-amber-900,
+.dark .text-amber-800,
+.dark .text-amber-700 {
+  color: #fcd34d !important;
+}
+.dark .text-amber-600 {
+  color: #fbbf24 !important;
+}
+
+.dark .bg-rose-50,
+.dark .bg-rose-50\/50,
+.dark .bg-rose-50\/40,
+.dark .bg-rose-50\/30 {
+  background-color: rgba(244, 63, 94, 0.15) !important;
+}
+.dark .bg-rose-100 {
+  background-color: rgba(244, 63, 94, 0.25) !important;
+}
+.dark .border-rose-100,
+.dark .border-rose-200 {
+  border-color: rgba(244, 63, 94, 0.3) !important;
+}
+.dark .text-rose-900,
+.dark .text-rose-800,
+.dark .text-rose-700 {
+  color: #fecdd3 !important;
+}
+.dark .text-rose-600 {
+  color: #fda4af !important;
+}
+
+.dark .bg-blue-50 {
+  background-color: rgba(59, 130, 246, 0.15) !important;
+}
+.dark .text-blue-600 {
+  color: #93c5fd !important;
+}
+
+.dark .bg-purple-50 {
+  background-color: rgba(168, 85, 247, 0.15) !important;
+}
+.dark .text-purple-600 {
+  color: #d8b4fe !important;
+}
+
+/* ── Dark Hover Overrides: Prevent light white flashes on hover ── */
+.dark *:hover:where(.hover\:bg-slate-50, .hover\:bg-slate-50\/80, .hover\:bg-stone-50, .hover\:bg-stone-50\/80) {
+  background-color: #33262e !important;
+}
+.dark *:hover:where(.hover\:bg-slate-100, .hover\:bg-slate-200, .hover\:bg-stone-100, .hover\:bg-stone-200) {
+  background-color: #3f3139 !important;
+}
+.dark *:hover:where(.hover\:bg-white) {
+  background-color: #33262e !important;
+}
+.dark *:hover:where(.hover\:bg-rose-50, .hover\:bg-rose-100) {
+  background-color: rgba(244, 63, 94, 0.22) !important;
+}
+.dark *:hover:where(.hover\:bg-amber-50, .hover\:bg-amber-100) {
+  background-color: rgba(245, 158, 11, 0.22) !important;
+}
+.dark *:hover:where(.hover\:bg-emerald-50) {
+  background-color: rgba(16, 185, 129, 0.22) !important;
+}
+.dark *:hover:where(.hover\:bg-indigo-50) {
+  background-color: rgba(99, 102, 241, 0.22) !important;
+}
+.dark *:hover:where(.hover\:border-slate-100, .hover\:border-slate-200, .hover\:border-stone-100) {
+  border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+.dark .border-slate-100,
+.dark .border-slate-200,
+.dark .border-stone-100,
+.dark .border-stone-200 {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.dark .divide-slate-50 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-stone-50 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-stone-100 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.dark input:not([type="checkbox"]):not([type="radio"]),
+.dark select,
+.dark textarea {
+  background-color: #281c23 !important;
+  color: #f3dde7 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #a88990 !important;
+}
+
+.dark .react-datepicker {
+  background-color: #24181f !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+.dark .react-datepicker__header {
+  background-color: #281c23 !important;
+  border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+}
+.dark .react-datepicker__current-month {
+  color: #ffb1c7 !important;
+}
+.dark .react-datepicker__day {
+  color: #f3dde7 !important;
+}
+.dark .react-datepicker__day:hover {
+  background-color: #33262e !important;
+}
+
 /* index.css */
 
 /* 1. Main Container */

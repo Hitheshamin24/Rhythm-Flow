@@ -14,8 +14,8 @@ const BatchesPage = () => {
     <div className="space-y-8 pb-10">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">Batches &amp; Timings</h2>
-          <p className="text-sm text-slate-500 mt-1">Organize your classes into specific time slots and days.</p>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-[#f3dde7] flex items-center gap-2">Batches &amp; Timings</h2>
+          <p className="text-sm text-slate-500 dark:text-[#e0bec6] mt-1">Organize your classes into specific time slots and days.</p>
         </div>
         <button onClick={openCreateModal}
           className="px-5 py-2.5 rounded-xl bg-linear-to-r from-rose-500 to-pink-600 text-white text-sm font-bold shadow-lg shadow-rose-500/20 hover:shadow-rose-500/30 hover:-translate-y-0.5 transition-all flex items-center gap-2">
@@ -49,38 +49,38 @@ const BatchesPage = () => {
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm">
-              <thead className="bg-slate-50/50">
-                <tr className="text-left text-xs font-bold text-slate-400 uppercase tracking-wider">
+              <thead className="bg-slate-50/50 dark:bg-surface-container-low">
+                <tr className="text-left text-xs font-bold text-slate-400 dark:text-on-surface-variant uppercase tracking-wider border-b border-slate-100 dark:border-outline-variant/20">
                   <th className="px-6 py-4">Batch Name</th>
                   <th className="px-6 py-4">Timing</th>
                   <th className="px-6 py-4">Days</th>
                   <th className="px-6 py-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-slate-50 dark:divide-outline-variant/10">
                 {batches.map((b) => (
-                  <tr key={b._id} className="group hover:bg-slate-50 transition-colors duration-200">
+                  <tr key={b._id} className="group hover:bg-slate-50 dark:hover:bg-surface-container-high/60 transition-colors duration-200">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-md border border-rose-100">{b.name.charAt(0).toUpperCase()}</div>
-                        <span className="font-semibold text-slate-800 text-base">{b.name}</span>
+                        <div className="h-10 w-10 rounded-full bg-rose-50 dark:bg-primary-container/20 text-rose-600 dark:text-primary flex items-center justify-center font-bold text-md border border-rose-100 dark:border-primary/30">{b.name.charAt(0).toUpperCase()}</div>
+                        <span className="font-semibold text-slate-800 dark:text-[#f3dde7] text-base">{b.name}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-2 text-slate-600 bg-slate-100/50 px-3 py-1.5 rounded-lg w-fit">
-                        <Clock size={14} className="text-slate-400" />
+                      <div className="flex items-center gap-2 text-slate-600 dark:text-on-surface-variant bg-slate-100/50 dark:bg-surface-container px-3 py-1.5 rounded-lg w-fit">
+                        <Clock size={14} className="text-slate-400 dark:text-on-surface-variant" />
                         <span className="font-medium text-xs md:text-sm">{b.timing || "No timing set"}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="inline-flex flex-wrap gap-1 text-xs text-slate-600">
-                        {b.days?.length ? b.days.map((d) => <span key={d} className="px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200">{d}</span>) : <span className="text-slate-400">No days set</span>}
+                      <span className="inline-flex flex-wrap gap-1 text-xs text-slate-600 dark:text-on-surface-variant">
+                        {b.days?.length ? b.days.map((d) => <span key={d} className="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-surface-container border border-slate-200 dark:border-outline-variant/30 text-slate-700 dark:text-on-surface">{d}</span>) : <span className="text-slate-400 dark:text-on-surface-variant">No days set</span>}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                        <button onClick={() => openEditModal(b)} className="p-2 rounded-xl text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors" title="Edit Batch"><Edit3 size={18} /></button>
-                        <button onClick={() => confirmDelete(b)} className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors" title="Delete Batch"><Trash2 size={18} /></button>
+                        <button onClick={() => openEditModal(b)} className="p-2 rounded-xl text-slate-400 dark:text-on-surface-variant hover:text-indigo-600 dark:hover:text-primary hover:bg-indigo-50 dark:hover:bg-primary-container/20 transition-colors" title="Edit Batch"><Edit3 size={18} /></button>
+                        <button onClick={() => confirmDelete(b)} className="p-2 rounded-xl text-slate-400 dark:text-on-surface-variant hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors" title="Delete Batch"><Trash2 size={18} /></button>
                       </div>
                     </td>
                   </tr>
@@ -93,49 +93,49 @@ const BatchesPage = () => {
 
       {/* Add/Edit Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl border border-white/20">
+        <div className="fixed inset-0 bg-slate-900/40 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+          <div className="bg-white dark:bg-surface-container-low rounded-3xl p-6 w-full max-w-md shadow-2xl border border-white/20 dark:border-outline-variant/20">
             <div className="flex justify-between items-center mb-6">
               <div>
-                <h3 className="text-xl font-bold text-slate-900">{editMode ? "Edit Batch" : "New Batch"}</h3>
-                <p className="text-xs text-slate-500 mt-0.5">Define your class group details.</p>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-[#f3dde7]">{editMode ? "Edit Batch" : "New Batch"}</h3>
+                <p className="text-xs text-slate-500 dark:text-on-surface-variant mt-0.5">Define your class group details.</p>
               </div>
-              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600 p-1 rounded-full hover:bg-slate-100 transition"><X size={20} /></button>
+              <button onClick={() => setShowModal(false)} className="text-slate-400 dark:text-on-surface-variant hover:text-slate-600 dark:hover:text-on-surface p-1 rounded-full hover:bg-slate-100 dark:hover:bg-surface-container transition"><X size={20} /></button>
             </div>
             <form onSubmit={handleSave} className="space-y-5">
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5 ml-1">Batch Name</label>
+                <label className="block text-xs font-bold text-slate-500 dark:text-on-surface-variant uppercase tracking-wide mb-1.5 ml-1">Batch Name</label>
                 <input type="text" required value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
                   placeholder="e.g. Morning Yoga"
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-semibold outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-400 transition" />
+                  className="w-full bg-slate-50 dark:bg-surface-container border border-slate-200 dark:border-outline-variant/30 text-slate-800 dark:text-on-surface rounded-xl px-4 py-3 text-sm font-semibold outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-400 transition" />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5 ml-1">Timing</label>
+                <label className="block text-xs font-bold text-slate-500 dark:text-on-surface-variant uppercase tracking-wide mb-1.5 ml-1">Timing</label>
                 <div className="relative">
-                  <Clock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <Clock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-on-surface-variant" />
                   <input type="text" value={form.timing} onChange={(e) => setForm((p) => ({ ...p, timing: e.target.value }))}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-sm font-semibold outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-400 transition"
+                    className="w-full bg-slate-50 dark:bg-surface-container border border-slate-200 dark:border-outline-variant/30 text-slate-800 dark:text-on-surface rounded-xl pl-10 pr-4 py-3 text-sm font-semibold outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-400 transition"
                     placeholder="e.g. 5:00 PM - 6:00 PM" />
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5 ml-1">Days</label>
-                <p className="text-[11px] text-slate-400 mb-2 ml-1">Select the days this batch runs.</p>
+                <label className="block text-xs font-bold text-slate-500 dark:text-on-surface-variant uppercase tracking-wide mb-1.5 ml-1">Days</label>
+                <p className="text-[11px] text-slate-400 dark:text-on-surface-variant mb-2 ml-1">Select the days this batch runs.</p>
                 <div className="flex flex-wrap gap-2">
                   {DAY_OPTIONS.map((day) => {
                     const active = form.days.includes(day);
                     return (
                       <button type="button" key={day} onClick={() => toggleDay(day)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${active ? "bg-rose-600 text-white border-rose-600" : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"}`}>
+                        className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${active ? "bg-rose-600 text-white border-rose-600" : "bg-slate-50 dark:bg-surface-container text-slate-600 dark:text-on-surface-variant border-slate-200 dark:border-outline-variant/30 hover:bg-slate-100 dark:hover:bg-surface-container-high"}`}>
                         {day}
                       </button>
                     );
                   })}
                 </div>
               </div>
-              {error && <p className="text-xs text-rose-600 bg-rose-50 px-3 py-2 rounded-lg border border-rose-100">{error}</p>}
+              {error && <p className="text-xs text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/20 px-3 py-2 rounded-lg border border-rose-100 dark:border-rose-900/30">{error}</p>}
               <div className="flex gap-3 pt-4">
-                <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-3 rounded-xl bg-slate-100 text-slate-700 font-bold text-sm hover:bg-slate-200 transition">Cancel</button>
+                <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-3 rounded-xl bg-slate-100 dark:bg-surface-container text-slate-700 dark:text-on-surface font-bold text-sm hover:bg-slate-200 dark:hover:bg-surface-container-high transition">Cancel</button>
                 <button type="submit" disabled={saving} className="flex-1 px-4 py-3 rounded-xl bg-rose-600 text-white font-bold text-sm hover:bg-rose-700 transition flex items-center justify-center gap-2 shadow-lg shadow-rose-500/20 disabled:opacity-60">
                   {saving ? <Loader2 size={18} className="animate-spin" /> : "Save Batch"}
                 </button>
@@ -147,15 +147,15 @@ const BatchesPage = () => {
 
       {/* Delete Modal */}
       {showDeleteModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl border border-white/20">
+        <div className="fixed inset-0 bg-slate-900/40 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+          <div className="bg-white dark:bg-surface-container-low rounded-3xl p-6 w-full max-w-sm shadow-2xl border border-white/20 dark:border-outline-variant/20">
             <div className="flex flex-col items-center text-center">
-              <div className="h-12 w-12 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 mb-4"><Trash2 size={24} /></div>
-              <h3 className="text-lg font-bold text-slate-900">Delete Batch?</h3>
-              <p className="text-sm text-slate-500 mt-2 mb-6">Are you sure you want to delete <span className="font-bold text-slate-800">"{selectedDelete?.name}"</span>? This cannot be undone.</p>
+              <div className="h-12 w-12 rounded-full bg-rose-100 dark:bg-rose-950/40 flex items-center justify-center text-rose-600 dark:text-rose-400 mb-4"><Trash2 size={24} /></div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-[#f3dde7]">Delete Batch?</h3>
+              <p className="text-sm text-slate-500 dark:text-on-surface-variant mt-2 mb-6">Are you sure you want to delete <span className="font-bold text-slate-800 dark:text-[#f3dde7]">"{selectedDelete?.name}"</span>? This cannot be undone.</p>
             </div>
             <div className="flex gap-3 mt-2">
-              <button onClick={() => setShowDeleteModal(false)} className="flex-1 px-4 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-semibold hover:bg-slate-200 transition">Cancel</button>
+              <button onClick={() => setShowDeleteModal(false)} className="flex-1 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-surface-container text-slate-700 dark:text-on-surface text-sm font-semibold hover:bg-slate-200 dark:hover:bg-surface-container-high transition">Cancel</button>
               <button onClick={handleDelete} className="flex-1 px-4 py-2.5 rounded-xl bg-rose-600 text-white text-sm font-semibold hover:bg-rose-700 shadow-lg shadow-rose-500/20 transition">Delete</button>
             </div>
           </div>

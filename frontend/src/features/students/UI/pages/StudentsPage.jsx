@@ -18,10 +18,10 @@ const StudentsPage = () => {
       {/* --- HEADER --- */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-[#f3dde7] tracking-tight">
             Students Directory
           </h2>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-slate-500 dark:text-[#e0bec6] mt-1">
             Manage registrations, batches and fees.
           </p>
         </div>
@@ -188,7 +188,7 @@ const StudentsPage = () => {
             <button
               type="submit"
               disabled={saving}
-              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-slate-900 text-white text-sm font-bold shadow-lg shadow-slate-900/20 hover:bg-slate-800 hover:-translate-y-0.5 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-slate-900 text-white dark:bg-primary-container dark:text-on-primary-container text-sm font-bold shadow-lg shadow-slate-900/20 hover:bg-slate-800 dark:hover:bg-primary-container/90 hover:-translate-y-0.5 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {saving ? (
                 <Loader2 size={16} className="animate-spin" />
@@ -202,11 +202,11 @@ const StudentsPage = () => {
       </div>
 
       {/* --- STUDENT LIST --- */}
-      <div className="bg-white rounded-[20px] shadow-sm border border-slate-100 flex flex-col">
+      <div className="bg-white dark:bg-surface-container-low rounded-[20px] shadow-sm border border-slate-100 dark:border-outline-variant/20 flex flex-col">
         {/* Search + Global batch controls */}
-        <div className="px-5 py-5 border-b border-slate-100 flex flex-col gap-4">
+        <div className="px-5 py-5 border-b border-slate-100 dark:border-outline-variant/20 flex flex-col gap-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
+            <h3 className="text-base font-bold text-slate-800 dark:text-[#f3dde7] flex items-center gap-2">
               Enrolled Students
             </h3>
 
@@ -214,14 +214,14 @@ const StudentsPage = () => {
               <div className="relative flex-1 sm:w-64">
                 <Search
                   size={16}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-on-surface-variant"
                 />
                 <input
                   type="text"
                   placeholder="Search students..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20 transition-all"
+                  className="w-full pl-9 pr-4 py-2.5 bg-slate-50 dark:bg-surface-container border border-slate-200 dark:border-outline-variant/30 text-slate-800 dark:text-on-surface rounded-xl text-sm font-medium outline-none focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20 transition-all"
                 />
               </div>
 
@@ -230,7 +230,7 @@ const StudentsPage = () => {
                 <select
                   value={selectedBatch}
                   onChange={(e) => setSelectedBatch(e.target.value)}
-                  className="flex-1 sm:flex-initial bg-slate-50 rounded-xl border border-slate-200 px-3 py-2.5 text-xs sm:text-sm font-medium outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all min-w-[140px]"
+                  className="flex-1 sm:flex-initial bg-slate-50 dark:bg-surface-container rounded-xl border border-slate-200 dark:border-outline-variant/30 text-slate-800 dark:text-on-surface px-3 py-2.5 text-xs sm:text-sm font-medium outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all min-w-[140px]"
                 >
                   <option value="">
                     {batches.length ? "Batch Update" : "No batches"}
@@ -299,17 +299,17 @@ const StudentsPage = () => {
           {!loading && sortedStudents.length > 0 && (
             <>
               {/* MOBILE VIEW: CARDS (Visible on small screens) */}
-              <div className="block md:hidden p-4 space-y-3 bg-slate-50/50">
+              <div className="block md:hidden p-4 space-y-3 bg-slate-50/50 dark:bg-transparent">
                 {sortedStudents.map((s) => {
                   const checked = selectedIds.includes(s._id);
                   return (
                     <div
                       key={s._id}
-                      className={`bg-white p-4 rounded-2xl border ${checked ? "border-rose-300 shadow-md shadow-rose-100" : "border-slate-100 shadow-sm"} transition-all duration-200 relative overflow-hidden`}
+                      className={`bg-white dark:bg-surface-container-low p-4 rounded-2xl border ${checked ? "border-rose-300 dark:border-primary/40 shadow-md shadow-rose-100 dark:shadow-none" : "border-slate-100 dark:border-outline-variant/20 shadow-sm"} transition-all duration-200 relative overflow-hidden`}
                     >
                       {/* Left Accent Bar */}
                       <div
-                        className={`absolute left-0 top-0 bottom-0 w-1 ${s.isActive ? "bg-emerald-400" : "bg-slate-300"}`}
+                        className={`absolute left-0 top-0 bottom-0 w-1 ${s.isActive ? "bg-emerald-400" : "bg-slate-300 dark:bg-outline-variant"}`}
                       />
 
                       <div className="flex gap-3">
@@ -328,16 +328,16 @@ const StudentsPage = () => {
                           <div className="flex justify-between items-start mb-2">
                             <div>
                               <h4
-                                className={`text-base font-bold truncate ${!s.isActive && "text-slate-400 line-through"}`}
+                                className={`text-base font-bold truncate ${!s.isActive ? "text-slate-400 dark:text-outline line-through" : "text-slate-800 dark:text-[#f3dde7]"}`}
                               >
                                 {s.name}
                               </h4>
-                              <p className="text-xs text-slate-400 font-medium">
+                              <p className="text-xs text-slate-400 dark:text-on-surface-variant font-medium">
                                 {s.phone}
                               </p>
                             </div>
                             <span
-                              className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${s.isPaid ? "bg-emerald-50 text-emerald-700 border-emerald-100" : "bg-amber-50 text-amber-700 border-amber-100"}`}
+                              className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${s.isPaid ? "bg-emerald-50 text-emerald-700 border-emerald-100 dark:bg-emerald-500/15 dark:text-emerald-400 dark:border-emerald-500/30" : "bg-amber-50 text-amber-700 border-amber-100 dark:bg-amber-500/15 dark:text-amber-400 dark:border-amber-500/30"}`}
                             >
                               {s.isPaid ? "PAID" : "DUE"}
                             </span>
@@ -346,37 +346,37 @@ const StudentsPage = () => {
                           {/* Details Grid */}
                           <div className="grid grid-cols-2 gap-y-2 gap-x-4 text-xs mb-3">
                             <div>
-                              <p className="text-slate-400 font-bold uppercase text-[10px]">
+                              <p className="text-slate-400 dark:text-on-surface-variant font-bold uppercase text-[10px]">
                                 Parent
                               </p>
-                              <p className="text-slate-700 font-medium truncate">
+                              <p className="text-slate-700 dark:text-[#f3dde7] font-medium truncate">
                                 {s.parentName || "-"}
                               </p>
                             </div>
                             <div>
-                              <p className="text-slate-400 font-bold uppercase text-[10px]">
+                              <p className="text-slate-400 dark:text-on-surface-variant font-bold uppercase text-[10px]">
                                 Batch
                               </p>
-                              <p className="text-slate-700 font-medium truncate">
+                              <p className="text-slate-700 dark:text-[#f3dde7] font-medium truncate">
                                 {getBatchLabel(s.batch)}
                               </p>
                             </div>
                             <div>
-                              <p className="text-slate-400 font-bold uppercase text-[10px]">
+                              <p className="text-slate-400 dark:text-on-surface-variant font-bold uppercase text-[10px]">
                                 Fee
                               </p>
-                              <p className="text-slate-700 font-medium">
+                              <p className="text-slate-700 dark:text-[#f3dde7] font-medium">
                                 ₹{s.monthlyFee}
                               </p>
                             </div>
                           </div>
 
                           {/* Actions Row */}
-                          <div className="flex items-center gap-2 pt-2 border-t border-slate-50">
+                          <div className="flex items-center gap-2 pt-2 border-t border-slate-50 dark:border-outline-variant/10">
                             <button
                               onClick={() => handleToggleisActive(s)}
                               disabled={togglingId === s._id}
-                              className="flex-1 py-1.5 rounded-lg bg-slate-50 text-slate-600 text-xs font-bold hover:bg-slate-100 transition flex items-center justify-center gap-1"
+                              className="flex-1 py-1.5 rounded-lg bg-slate-50 dark:bg-surface-container text-slate-600 dark:text-on-surface-variant text-xs font-bold hover:bg-slate-100 dark:hover:bg-surface-container-high transition flex items-center justify-center gap-1"
                             >
                               {togglingId === s._id ? (
                                 <Loader2 size={12} className="animate-spin" />
@@ -391,7 +391,7 @@ const StudentsPage = () => {
                                 setSelectedStudent(s);
                                 setShowDeleteModal(true);
                               }}
-                              className="p-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 transition"
+                              className="p-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/40 transition"
                             >
                               <Trash2 size={14} />
                             </button>
@@ -406,7 +406,7 @@ const StudentsPage = () => {
               {/* DESKTOP VIEW: TABLE (Hidden on mobile) */}
               <div className="hidden md:block overflow-x-auto custom-scrollbar">
                 <table className="min-w-full text-sm">
-                  <thead className="bg-slate-50/80 text-slate-400 font-bold text-xs uppercase tracking-wider border-b border-slate-100 backdrop-blur-sm sticky top-0 z-10">
+                  <thead className="bg-slate-50/80 dark:bg-surface-container-low text-slate-400 dark:text-on-surface-variant font-bold text-xs uppercase tracking-wider border-b border-slate-100 dark:border-outline-variant/20 backdrop-blur-sm sticky top-0 z-10">
                     <tr>
                       <th className="px-4 py-4 text-center w-12">
                         {/* Header checkbox handled in main header now */}#
@@ -418,15 +418,15 @@ const StudentsPage = () => {
                       <th className="px-6 py-4 text-right pr-8">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-50">
+                  <tbody className="divide-y divide-slate-50 dark:divide-outline-variant/10">
                     {sortedStudents.map((s) => {
                       const checked = selectedIds.includes(s._id);
                       return (
                         <tr
                           key={s._id}
-                          className={`group hover:bg-slate-50/80 transition-colors ${
+                          className={`group hover:bg-slate-50/80 dark:hover:bg-surface-container-high/60 transition-colors ${
                             !s.isActive ? "opacity-50 grayscale" : ""
-                          } ${checked ? "bg-rose-50/30" : ""}`}
+                          } ${checked ? "bg-rose-50/30 dark:bg-primary-container/10" : ""}`}
                         >
                           {/* Checkbox */}
                           <td className="px-4 py-4 text-center">
@@ -441,14 +441,14 @@ const StudentsPage = () => {
                           {/* Student */}
                           <td className="px-6 py-4 pl-4">
                             <div className="flex items-center gap-3">
-                              <div className="h-9 w-9 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 font-bold text-xs border border-rose-200">
+                              <div className="h-9 w-9 rounded-full bg-rose-100 dark:bg-primary-container/20 flex items-center justify-center text-rose-600 dark:text-primary font-bold text-xs border border-rose-200 dark:border-primary/30">
                                 {s.name.charAt(0).toUpperCase()}
                               </div>
                               <div>
-                                <div className="font-bold text-slate-800">
+                                <div className="font-bold text-slate-800 dark:text-[#f3dde7]">
                                   {s.name}
                                 </div>
-                                <div className="text-xs text-slate-400 font-mono font-medium">
+                                <div className="text-xs text-slate-400 dark:text-on-surface-variant font-mono font-medium">
                                   {s.phone || "No phone"}
                                 </div>
                               </div>
@@ -457,10 +457,10 @@ const StudentsPage = () => {
 
                           {/* Parent + fee */}
                           <td className="px-6 py-4">
-                            <div className="text-slate-700 font-medium text-xs">
+                            <div className="text-slate-700 dark:text-[#f3dde7] font-medium text-xs">
                               {s.parentName || "-"}
                             </div>
-                            <div className="text-[10px] font-bold text-slate-400 uppercase mt-0.5">
+                            <div className="text-[10px] font-bold text-slate-400 dark:text-on-surface-variant uppercase mt-0.5">
                               {s.monthlyFee
                                 ? `Fee: ₹${s.monthlyFee}`
                                 : "Fee: -"}
@@ -469,7 +469,7 @@ const StudentsPage = () => {
 
                           {/* Batch */}
                           <td className="px-6 py-4">
-                            <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-slate-100 text-xs font-bold text-slate-600 border border-slate-200">
+                            <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-slate-100 dark:bg-surface-container text-xs font-bold text-slate-600 dark:text-on-surface-variant border border-slate-200 dark:border-outline-variant/30">
                               {getBatchLabel(s.batch)}
                             </span>
                           </td>
@@ -479,13 +479,13 @@ const StudentsPage = () => {
                             <span
                               className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border ${
                                 s.isPaid
-                                  ? "bg-emerald-50 text-emerald-700 border-emerald-100"
-                                  : "bg-amber-50 text-amber-700 border-amber-100"
+                                  ? "bg-emerald-50 text-emerald-700 border-emerald-100 dark:bg-emerald-500/15 dark:text-emerald-400 dark:border-emerald-500/30"
+                                  : "bg-amber-50 text-amber-700 border-amber-100 dark:bg-amber-500/15 dark:text-amber-400 dark:border-amber-500/30"
                               }`}
                             >
                               <span
                                 className={`h-1.5 w-1.5 rounded-full ${
-                                  s.isPaid ? "bg-emerald-500" : "bg-amber-500"
+                                  s.isPaid ? "bg-emerald-500 dark:bg-emerald-400" : "bg-amber-500 dark:bg-amber-400"
                                 }`}
                               ></span>
                               {s.isPaid ? "Paid" : "Pending"}
@@ -499,7 +499,7 @@ const StudentsPage = () => {
                               disabled={
                                 togglingId === s._id || deletingId === s._id
                               }
-                              className="p-2 rounded-lg hover:bg-white text-slate-400 hover:text-rose-600 hover:shadow-sm border border-transparent hover:border-slate-100 transition-all"
+                              className="p-2 rounded-lg hover:bg-white dark:hover:bg-surface-container text-slate-400 dark:text-on-surface-variant hover:text-rose-600 dark:hover:text-primary hover:shadow-sm border border-transparent hover:border-slate-100 dark:hover:border-outline-variant/30 transition-all"
                               title={
                                 !s.isActive ? "Mark Active" : "Mark Inactive"
                               }
@@ -519,7 +519,7 @@ const StudentsPage = () => {
                                 setShowDeleteModal(true);
                               }}
                               disabled={deletingId === s._id}
-                              className="p-2 rounded-lg hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors"
+                              className="p-2 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/40 text-slate-400 dark:text-on-surface-variant hover:text-rose-600 dark:hover:text-rose-400 transition-colors"
                               title="Delete Student"
                             >
                               <Trash2 size={16} />
@@ -538,18 +538,18 @@ const StudentsPage = () => {
 
       {/* --- DELETE MODAL --- */}
       {showDeleteModal && selectedStudent && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl w-full max-w-sm shadow-2xl border border-white/20 p-6 scale-100 animate-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 dark:bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-surface-container-low rounded-3xl w-full max-w-sm shadow-2xl border border-white/20 dark:border-outline-variant/20 p-6 scale-100 animate-in zoom-in-95 duration-200">
             <div className="flex flex-col items-center text-center">
-              <div className="h-14 w-14 rounded-full bg-rose-50 flex items-center justify-center text-rose-500 mb-5 shadow-sm">
+              <div className="h-14 w-14 rounded-full bg-rose-50 dark:bg-rose-950/40 flex items-center justify-center text-rose-500 dark:text-rose-400 mb-5 shadow-sm">
                 <AlertTriangle size={28} />
               </div>
-              <h3 className="text-xl font-bold text-slate-900">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-[#f3dde7]">
                 Delete Student?
               </h3>
-              <p className="text-sm text-slate-500 mt-2 mb-8 leading-relaxed">
+              <p className="text-sm text-slate-500 dark:text-on-surface-variant mt-2 mb-8 leading-relaxed">
                 Are you sure you want to delete{" "}
-                <span className="font-bold text-slate-800">
+                <span className="font-bold text-slate-800 dark:text-[#f3dde7]">
                   "{selectedStudent.name}"
                 </span>
                 ?
@@ -560,7 +560,7 @@ const StudentsPage = () => {
               <div className="flex w-full gap-3">
                 <button
                   onClick={() => setShowDeleteModal(false)}
-                  className="flex-1 py-3 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold text-sm hover:bg-slate-50 transition"
+                  className="flex-1 py-3 rounded-xl bg-white dark:bg-surface-container border border-slate-200 dark:border-outline-variant/30 text-slate-700 dark:text-on-surface font-bold text-sm hover:bg-slate-50 dark:hover:bg-surface-container-high transition"
                 >
                   Cancel
                 </button>
