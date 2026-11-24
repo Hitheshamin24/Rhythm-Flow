@@ -77,7 +77,7 @@ const AuthPage = () => {
       </div>
 
       {/* Main Card */}
-      <div className="relative z-10 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-black/40 max-w-[420px] w-full p-6 md:p-10 border border-white/40 ring-1 ring-white/50">
+      <div className="relative z-10 bg-white/95 dark:bg-surface-container-low backdrop-blur-xl rounded-3xl shadow-2xl shadow-black/40 max-w-[420px] w-full p-6 md:p-10 border border-white/40 dark:border-outline-variant/20 ring-1 ring-white/50 dark:ring-outline-variant/10">
         {/* Header */}
         <div className="flex flex-col items-center text-center space-y-4 mb-6">
           <div className="h-16 w-16 rounded-2xl bg-linear-to-br from-[#29171c] to-[#3d1f28] flex items-center justify-center text-white p-3 shadow-lg shadow-rose-900/20 transform hover:rotate-3 transition-transform duration-300">
@@ -85,12 +85,12 @@ const AuthPage = () => {
           </div>
           <div>
             <h1
-              className="text-4xl font-bold tracking-[0.25em] text-slate-900"
+              className="text-4xl font-bold tracking-[0.25em] text-slate-900 dark:text-on-surface"
               style={{ fontFamily: "Inter Tight" }}
             >
               D N C R
             </h1>
-            <p className="text-slate-500 text-sm mt-1 font-medium">
+            <p className="text-slate-500 dark:text-on-surface-variant text-sm mt-1 font-medium">
               {userType === "owner"
                 ? mode === "login"
                   ? "Welcome back, Studio Owner"
@@ -109,7 +109,7 @@ const AuthPage = () => {
             className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold border transition-all duration-200 ${
               userType === "owner"
                 ? "bg-[#29171c] text-white border-transparent shadow-md"
-                : "bg-slate-50 text-slate-500 border-slate-200 hover:border-slate-300"
+                : "bg-slate-50 text-slate-500 border-slate-200 hover:border-slate-300 dark:bg-surface-container dark:text-on-surface-variant dark:border-outline-variant/30 dark:hover:border-outline-variant/60"
             }`}
           >
             <Building2 size={15} />
@@ -120,7 +120,7 @@ const AuthPage = () => {
             className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold border transition-all duration-200 ${
               userType === "trainer"
                 ? "bg-[#29171c] text-white border-transparent shadow-md"
-                : "bg-slate-50 text-slate-500 border-slate-200 hover:border-slate-300"
+                : "bg-slate-50 text-slate-500 border-slate-200 hover:border-slate-300 dark:bg-surface-container dark:text-on-surface-variant dark:border-outline-variant/30 dark:hover:border-outline-variant/60"
             }`}
           >
             <UserCog size={15} />
@@ -129,16 +129,16 @@ const AuthPage = () => {
         </div>
 
         {/* Login / Register Tab Switcher */}
-        <div className="bg-slate-100/80 p-1.5 rounded-2xl flex relative mb-6 border border-slate-200/50">
+        <div className="bg-slate-100/80 dark:bg-surface-container/80 p-1.5 rounded-2xl flex relative mb-6 border border-slate-200/50 dark:border-outline-variant/20">
           <div
-            className={`absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-white rounded-xl shadow-sm transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] ${
+            className={`absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-white dark:bg-surface-container-high rounded-xl shadow-sm transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] ${
               mode === "login" ? "left-1.5" : "left-[calc(50%+1.5px)]"
             }`}
           />
           <button
             onClick={() => setMode("login")}
             className={`flex-1 py-2.5 text-sm font-bold rounded-xl transition-colors duration-200 relative z-10 ${
-              mode === "login" ? "text-rose-700" : "text-slate-500 hover:text-slate-700"
+              mode === "login" ? "text-rose-700 dark:text-primary" : "text-slate-500 hover:text-slate-700 dark:text-on-surface-variant dark:hover:text-on-surface"
             }`}
           >
             Login
@@ -146,7 +146,7 @@ const AuthPage = () => {
           <button
             onClick={() => setMode("register")}
             className={`flex-1 py-2.5 text-sm font-bold rounded-xl transition-colors duration-200 relative z-10 ${
-              mode === "register" ? "text-rose-700" : "text-slate-500 hover:text-slate-700"
+              mode === "register" ? "text-rose-700 dark:text-primary" : "text-slate-500 hover:text-slate-700 dark:text-on-surface-variant dark:hover:text-on-surface"
             }`}
           >
             Register
@@ -213,14 +213,14 @@ const AuthPage = () => {
                 {mode === "register" && (
                   <div className="relative group animate-in slide-in-from-top-4 fade-in duration-300">
                     <Building2
-                      className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-rose-600 transition-colors"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-on-surface-variant/60 group-focus-within:text-rose-600 dark:group-focus-within:text-primary transition-colors"
                       size={18}
                     />
                     <select
                       value={selectedStudioId}
                       onChange={(e) => setSelectedStudioId(e.target.value)}
                       required
-                      className="w-full bg-slate-50/50 hover:bg-slate-50 focus:bg-white rounded-xl border border-slate-200 pl-11 pr-10 py-3.5 text-sm outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all text-slate-800 font-medium appearance-none"
+                      className="w-full bg-slate-50/50 hover:bg-slate-50 focus:bg-white dark:bg-surface-container dark:hover:bg-surface-container-high dark:focus:bg-surface-container-high rounded-xl border border-slate-200 dark:border-outline-variant/40 pl-11 pr-10 py-3.5 text-sm outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 dark:focus:border-primary/60 transition-all text-slate-800 dark:text-on-surface font-medium appearance-none"
                     >
                       <option value="">
                         {studiosLoading ? "Loading studios…" : "Select your studio"}
@@ -232,7 +232,7 @@ const AuthPage = () => {
                       ))}
                     </select>
                     <ChevronDown
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-on-surface-variant/60 pointer-events-none"
                       size={16}
                     />
                   </div>
@@ -243,12 +243,12 @@ const AuthPage = () => {
             {/* Password (always visible) */}
             <div className="relative group">
               <Lock
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-rose-600 transition-colors"
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-on-surface-variant/60 group-focus-within:text-rose-600 dark:group-focus-within:text-primary transition-colors"
                 size={18}
               />
               <input
                 type={show ? "text" : "password"}
-                className="w-full bg-slate-50/50 hover:bg-slate-50 focus:bg-white rounded-xl border border-slate-200 pl-11 pr-10 py-3.5 text-sm outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all placeholder:text-slate-400 text-slate-800 font-medium"
+                className="w-full bg-slate-50/50 hover:bg-slate-50 focus:bg-white dark:bg-surface-container dark:hover:bg-surface-container-high dark:focus:bg-surface-container-high rounded-xl border border-slate-200 dark:border-outline-variant/40 pl-11 pr-10 py-3.5 text-sm outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 dark:focus:border-primary/60 transition-all placeholder:text-slate-400 dark:placeholder:text-on-surface-variant/50 text-slate-800 dark:text-on-surface font-medium"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -257,7 +257,7 @@ const AuthPage = () => {
               <button
                 type="button"
                 onClick={() => setShow(!show)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-on-surface-variant dark:hover:text-on-surface p-1"
               >
                 {show ? (
                   <span className="text-[10px] font-bold uppercase">Hide</span>
@@ -283,7 +283,7 @@ const AuthPage = () => {
 
           {/* Trainer register pending notice */}
           {userType === "trainer" && registeredEmail === "pending" && mode === "login" && (
-            <div className="flex items-start gap-3 text-sm text-emerald-700 bg-emerald-50/80 border border-emerald-100 rounded-xl p-3 animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-start gap-3 text-sm text-emerald-700 dark:text-emerald-300 bg-emerald-50/80 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/40 rounded-xl p-3 animate-in fade-in zoom-in-95 duration-200">
               <span className="text-lg leading-none">✅</span>
               <p className="font-medium">
                 Registration submitted! Your account is pending approval from the studio owner.
@@ -293,7 +293,7 @@ const AuthPage = () => {
 
           {/* Error message */}
           {error && (
-            <div className="flex items-start gap-3 text-sm text-rose-600 bg-rose-50/80 border border-rose-100 rounded-xl p-3 animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-start gap-3 text-sm text-rose-600 dark:text-rose-400 bg-rose-50/80 dark:bg-rose-900/20 border border-rose-100 dark:border-rose-800/40 rounded-xl p-3 animate-in fade-in zoom-in-95 duration-200">
               <span className="text-lg leading-none">⚠️</span>
               <p className="font-medium">{error}</p>
             </div>
@@ -322,7 +322,7 @@ const AuthPage = () => {
         </form>
       </div>
 
-      <div className="text-white/30 text-xs font-medium tracking-wide mt-8 pb-4">
+      <div className="text-white/30 dark:text-on-surface-variant/40 text-xs font-medium tracking-wide mt-8 pb-4">
         © 2025 DNCR. All rights reserved.
       </div>
 
@@ -332,8 +332,8 @@ const AuthPage = () => {
       {showForgotModal && (
         <ModalOverlay onClose={() => setShowForgotModal(false)}>
           <div className="text-center mb-6">
-            <h3 className="text-xl font-bold text-slate-900">Forgot Password</h3>
-            <p className="text-xs text-slate-500 mt-1 max-w-[260px] mx-auto">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-on-surface">Forgot Password</h3>
+            <p className="text-xs text-slate-500 dark:text-on-surface-variant mt-1 max-w-[260px] mx-auto">
               {fpStep === "request"
                 ? userType === "owner"
                   ? "Enter your Class Name, Email OR Phone to receive an OTP."
@@ -362,7 +362,7 @@ const AuthPage = () => {
                       key={index}
                       type="text"
                       maxLength="1"
-                      className="w-10 h-12 bg-slate-50 border border-slate-200 rounded-lg text-center text-lg font-bold text-slate-800 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20 outline-none transition-all"
+                      className="w-10 h-12 bg-slate-50 dark:bg-surface-container border border-slate-200 dark:border-outline-variant/40 rounded-lg text-center text-lg font-bold text-slate-800 dark:text-on-surface focus:border-rose-500 dark:focus:border-primary/60 focus:ring-2 focus:ring-rose-500/20 outline-none transition-all"
                       value={data}
                       onChange={(e) => handleOtpChange(e.target, index, setFpOtp)}
                       onKeyDown={(e) => handleOtpKeyDown(e, index, setFpOtp)}
@@ -391,12 +391,12 @@ const AuthPage = () => {
             )}
 
             {fpError && (
-              <p className="text-center text-xs text-rose-600 bg-rose-50 py-2 rounded-lg font-medium">
+              <p className="text-center text-xs text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-900/20 py-2 rounded-lg font-medium">
                 {fpError}
               </p>
             )}
             {fpMessage && (
-              <p className="text-center text-xs text-emerald-600 bg-emerald-50 py-2 rounded-lg font-medium">
+              <p className="text-center text-xs text-emerald-600 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/20 py-2 rounded-lg font-medium">
                 {fpMessage}
               </p>
             )}
@@ -405,7 +405,7 @@ const AuthPage = () => {
               <button
                 type="button"
                 onClick={() => setShowForgotModal(false)}
-                className="flex-1 py-2.5 rounded-xl bg-slate-100 text-slate-600 text-xs font-bold hover:bg-slate-200 transition-colors"
+                className="flex-1 py-2.5 rounded-xl bg-slate-100 dark:bg-surface-container text-slate-600 dark:text-on-surface-variant text-xs font-bold hover:bg-slate-200 dark:hover:bg-surface-container-high transition-colors"
               >
                 Cancel
               </button>
@@ -426,13 +426,13 @@ const AuthPage = () => {
       {showVerifyModal && (
         <ModalOverlay onClose={() => setShowVerifyModal(false)}>
           <div className="text-center mb-6">
-            <div className="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-3 text-rose-600">
+            <div className="w-12 h-12 bg-rose-100 dark:bg-rose-900/30 rounded-full flex items-center justify-center mx-auto mb-3 text-rose-600 dark:text-rose-400">
               <Mail size={24} />
             </div>
-            <h3 className="text-xl font-bold text-slate-900">Verify Email</h3>
-            <p className="text-xs text-slate-500 mt-2">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-on-surface">Verify Email</h3>
+            <p className="text-xs text-slate-500 dark:text-on-surface-variant mt-2">
               Code sent to{" "}
-              <span className="font-semibold text-slate-700">{registeredEmail}</span>
+              <span className="font-semibold text-slate-700 dark:text-on-surface">{registeredEmail}</span>
             </p>
           </div>
 
@@ -443,7 +443,7 @@ const AuthPage = () => {
                   key={index}
                   type="text"
                   maxLength="1"
-                  className="w-10 h-12 bg-slate-50 border border-slate-200 rounded-lg text-center text-lg font-bold text-slate-800 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20 outline-none transition-all"
+                  className="w-10 h-12 bg-slate-50 dark:bg-surface-container border border-slate-200 dark:border-outline-variant/40 rounded-lg text-center text-lg font-bold text-slate-800 dark:text-on-surface focus:border-rose-500 dark:focus:border-primary/60 focus:ring-2 focus:ring-rose-500/20 outline-none transition-all"
                   value={data}
                   onChange={(e) => handleOtpChange(e.target, index, setVerifyOtp)}
                   onKeyDown={(e) => handleOtpKeyDown(e, index, setVerifyOtp)}
@@ -453,12 +453,12 @@ const AuthPage = () => {
             </div>
 
             {verifyError && (
-              <p className="text-center text-xs text-rose-600 bg-rose-50 py-2 rounded-lg font-medium">
+              <p className="text-center text-xs text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-900/20 py-2 rounded-lg font-medium">
                 {verifyError}
               </p>
             )}
             {verifyMessage && (
-              <p className="text-center text-xs text-emerald-600 bg-emerald-50 py-2 rounded-lg font-medium">
+              <p className="text-center text-xs text-emerald-600 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/20 py-2 rounded-lg font-medium">
                 {verifyMessage}
               </p>
             )}
