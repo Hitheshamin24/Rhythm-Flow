@@ -17,12 +17,12 @@ const DashboardLayout = ({ children }) => {
   });
 
   return (
-    <div className="flex h-screen bg-[#FFF5F7] dark:bg-[#1b1017] text-slate-800 dark:text-[#f3dde7] font-sans overflow-hidden transition-colors duration-300">
+    <div className="flex h-screen bg-[#FFF5F7] dark:bg-[#1b1017] text-slate-800 dark:text-[#f3dde7] overflow-hidden transition-colors duration-300">
       <Sidebar />
       <div className="flex-1 flex flex-col h-full relative overflow-hidden transition-all duration-300">
         <header className="shrink-0 z-20 w-full px-4 py-3 md:px-8 md:py-5 border-b border-pink-100 dark:border-white/10 bg-white/80 dark:bg-[#160b12]/80 backdrop-blur-md flex items-center justify-between shadow-sm transition-colors duration-300">
           <div className="pl-12 md:pl-0 flex flex-col justify-center pr-2">
-            <h1 className="text-lg md:text-2xl font-bold tracking-tight text-slate-900 dark:text-[#f3dde7] truncate max-w-[200px] md:max-w-none">
+            <h1 className="font-headline-sm tracking-tight text-slate-900 dark:text-[#f3dde7] truncate max-w-[200px] md:max-w-none">
               Welcome <span className="text-rose-600 dark:text-[#ffb1c7]">{studioName}</span>
             </h1>
             <p className="text-xs md:text-sm text-slate-500 dark:text-[#e0bec6] mt-0.5 hidden sm:block">

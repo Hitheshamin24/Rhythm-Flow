@@ -14,7 +14,7 @@ const BatchesPage = () => {
     <div className="space-y-8 pb-10">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-[#f3dde7] flex items-center gap-2">Batches &amp; Timings</h2>
+          <h2 className="font-headline-lg text-slate-900 dark:text-[#f3dde7] flex items-center gap-2">Batches &amp; Timings</h2>
           <p className="text-sm text-slate-500 dark:text-[#e0bec6] mt-1">Organize your classes into specific time slots and days.</p>
         </div>
         <button onClick={openCreateModal}
@@ -97,7 +97,7 @@ const BatchesPage = () => {
           <div className="bg-white dark:bg-surface-container-low rounded-3xl p-6 w-full max-w-md shadow-2xl border border-white/20 dark:border-outline-variant/20">
             <div className="flex justify-between items-center mb-6">
               <div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-[#f3dde7]">{editMode ? "Edit Batch" : "New Batch"}</h3>
+                <h3 className="font-headline-sm text-slate-900 dark:text-[#f3dde7]">{editMode ? "Edit Batch" : "New Batch"}</h3>
                 <p className="text-xs text-slate-500 dark:text-on-surface-variant mt-0.5">Define your class group details.</p>
               </div>
               <button onClick={() => setShowModal(false)} className="text-slate-400 dark:text-on-surface-variant hover:text-slate-600 dark:hover:text-on-surface p-1 rounded-full hover:bg-slate-100 dark:hover:bg-surface-container transition"><X size={20} /></button>

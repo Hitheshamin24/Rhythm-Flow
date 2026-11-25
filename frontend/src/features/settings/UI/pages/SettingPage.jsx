@@ -66,12 +66,12 @@ const SettingsPage = () => {
     handleForgotSubmit,
   } = useSettings();
   return (
-    <div className="space-y-8 pb-10 max-w-5xl mx-auto font-sans">
+    <div className="space-y-8 pb-10 max-w-5xl mx-auto">
       
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-5">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-[#f3dde7] flex items-center gap-3">
+          <h2 className="font-headline-lg text-slate-900 dark:text-[#f3dde7] flex items-center gap-3">
             <div className="bg-rose-100 dark:bg-rose-950/60 p-2 rounded-xl text-rose-600 dark:text-rose-400">
                 <SettingsIcon size={24} />
             </div>
@@ -342,7 +342,7 @@ const ModalOverlay = ({ onClose, title, children }) => (
             <button onClick={onClose} className="absolute right-4 top-4 text-slate-400 dark:text-on-surface-variant hover:text-slate-700 dark:hover:text-on-surface bg-slate-50 dark:bg-surface-container hover:bg-slate-100 dark:hover:bg-surface-container-high p-1.5 rounded-full transition-all">
                 <X size={16} />
             </button>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-[#f3dde7] text-center">{title}</h3>
+            <h3 className="font-headline-sm text-slate-900 dark:text-[#f3dde7] text-center">{title}</h3>
             {children}
         </div>
     </div>

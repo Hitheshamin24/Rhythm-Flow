@@ -8,7 +8,7 @@ const TrainerApprovalsPage = () => {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-[#f3dde7]">Manage Trainers</h2>
+          <h2 className="font-headline-lg text-slate-900 dark:text-[#f3dde7]">Manage Trainers</h2>
           <p className="text-slate-500 dark:text-[#e0bec6] text-sm mt-1">Review pending requests and manage approved trainers for your studio.</p>
         </div>
         <button onClick={fetchData} className="text-xs font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-800 dark:hover:text-rose-300 transition-colors px-3 py-1.5 border border-rose-200 dark:border-rose-900/40 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/30">Refresh</button>

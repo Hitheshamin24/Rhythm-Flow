@@ -35,7 +35,7 @@ const AttendancePage = () => {
       {/* HEADER */}
       <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-6">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-[#f3dde7]">Attendance</h2>
+          <h2 className="font-headline-lg text-slate-900 dark:text-[#f3dde7]">Attendance</h2>
           <p className="text-sm text-slate-500 dark:text-[#e0bec6] mt-1">Select a batch and date to mark attendance.</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-4">

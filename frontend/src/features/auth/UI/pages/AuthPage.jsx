@@ -69,7 +69,7 @@ const AuthPage = () => {
     isSuccessNotice,
   } = useAuth();
   return (
-    <div className="grid place-items-center min-h-[100dvh] w-full bg-[#1F1216] relative overflow-x-hidden px-4 py-8 font-sans selection:bg-rose-500/30">
+    <div className="grid place-items-center min-h-[100dvh] w-full bg-[#1F1216] relative overflow-x-hidden px-4 py-8 selection:bg-rose-500/30">
       {/* Background Ambience */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-rose-600/15 rounded-full blur-[120px]" />
@@ -86,7 +86,6 @@ const AuthPage = () => {
           <div>
             <h1
               className="text-4xl font-bold tracking-[0.25em] text-slate-900 dark:text-on-surface"
-              style={{ fontFamily: "Inter Tight" }}
             >
               D N C R
             </h1>

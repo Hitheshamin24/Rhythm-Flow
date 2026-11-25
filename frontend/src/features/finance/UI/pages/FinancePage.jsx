@@ -59,12 +59,12 @@ const FinancePage = () => {
   } = useFinance();
   return (
     // Applied Warm Background
-    <div className="space-y-8 pb-10 bg-[#FFFBF7] dark:bg-[#1b1017] min-h-screen p-6 md:p-8 font-sans text-stone-800 dark:text-[#f3dde7]">
+    <div className="space-y-8 pb-10 bg-[#FFFBF7] dark:bg-[#1b1017] min-h-screen p-6 md:p-8 text-stone-800 dark:text-[#f3dde7]">
       {/* --- Header --- */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           {/* Serif Font & Chocolate Color */}
-          <h2 className="text-4xl font-bold font-serif dark:font-sans text-[#2C1810] dark:text-[#f3dde7] tracking-tight">
+          <h2 className="font-headline-lg text-[#2C1810] dark:text-[#f3dde7] tracking-tight">
             Financial Overview
           </h2>
           <p className="text-sm font-medium text-stone-500 dark:text-[#e0bec6] mt-2 flex items-center gap-2">
@@ -200,7 +200,7 @@ const FinancePage = () => {
               {/* Left Chart */}
               <div className="lg:col-span-2 bg-white dark:bg-surface-container-low rounded-3xl border border-stone-100 dark:border-outline-variant/20 p-6 md:p-8 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.05)] relative overflow-hidden">
                 <div className="flex justify-between items-center mb-8">
-                  <h3 className="text-lg font-bold font-serif dark:font-sans text-[#2C1810] dark:text-[#f3dde7] flex items-center gap-2">
+                  <h3 className="font-headline-sm text-[#2C1810] dark:text-[#f3dde7] flex items-center gap-2">
                     <div className="bg-stone-100 dark:bg-surface-container-high p-2 rounded-lg text-stone-500 dark:text-on-surface-variant">
                       <TrendingUp size={18} />
                     </div>
@@ -296,7 +296,7 @@ const FinancePage = () => {
               {/* Right Chart (Monthly Details) */}
               <div className="bg-white dark:bg-surface-container-low rounded-3xl border border-stone-100 dark:border-outline-variant/20 p-6 md:p-8 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.05)] flex flex-col h-full">
                 <div className="mb-6">
-                  <h3 className="text-xl font-bold font-serif dark:font-sans text-[#2C1810] dark:text-[#f3dde7]">
+                  <h3 className="font-headline-sm text-[#2C1810] dark:text-[#f3dde7]">
                     {selectedMonth?.label || "This Month"}
                   </h3>
                   <p className="text-xs font-medium text-stone-400 dark:text-on-surface-variant mt-1">
@@ -367,7 +367,7 @@ const FinancePage = () => {
             <div className="bg-white dark:bg-surface-container-low rounded-3xl border border-stone-100 dark:border-outline-variant/20 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.05)] overflow-hidden">
               <div className="p-6 md:p-8 border-b border-stone-50 dark:border-outline-variant/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <h3 className="text-lg font-bold font-serif dark:font-sans text-[#2C1810] dark:text-[#f3dde7]">
+                  <h3 className="font-headline-sm text-[#2C1810] dark:text-[#f3dde7] flex items-center gap-2">
                     Recent Expenses
                   </h3>
                   <p className="text-xs text-stone-500 dark:text-on-surface-variant mt-1 font-medium">
@@ -443,7 +443,7 @@ const FinancePage = () => {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 px-4 animate-in fade-in duration-300">
           <div className="bg-white dark:bg-surface-container-low rounded-4xl w-full max-w-sm p-8 shadow-2xl border border-stone-200/50 dark:border-outline-variant/20 scale-100 animate-in zoom-in-95 duration-200">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-xl font-bold font-serif dark:font-sans text-[#2C1810] dark:text-on-surface tracking-tight">
+              <h3 className="font-headline-sm text-[#2C1810] dark:text-on-surface tracking-tight">
                 New Expense
               </h3>
               <button
@@ -534,7 +534,7 @@ const FinancePage = () => {
               <div className="h-16 w-16 rounded-full bg-rose-50 dark:bg-error/10 flex items-center justify-center text-rose-500 dark:text-error mb-6 shadow-sm">
                 <Trash2 size={28} strokeWidth={1.5} />
               </div>
-              <h2 className="text-xl font-bold font-serif dark:font-sans text-[#2C1810] dark:text-on-surface">
+              <h2 className="font-headline-sm text-[#2C1810] dark:text-on-surface">
                 Delete Expense?
               </h2>
               <p className="text-sm text-stone-500 dark:text-on-surface-variant mt-2 mb-8 leading-relaxed">

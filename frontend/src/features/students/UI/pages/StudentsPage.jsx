@@ -18,7 +18,7 @@ const StudentsPage = () => {
       {/* --- HEADER --- */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-[#f3dde7] tracking-tight">
+          <h2 className="font-headline-lg tracking-tight text-slate-800 dark:text-[#f3dde7]">
             Students Directory
           </h2>
           <p className="text-sm text-slate-500 dark:text-[#e0bec6] mt-1">
@@ -544,7 +544,7 @@ const StudentsPage = () => {
               <div className="h-14 w-14 rounded-full bg-rose-50 dark:bg-rose-950/40 flex items-center justify-center text-rose-500 dark:text-rose-400 mb-5 shadow-sm">
                 <AlertTriangle size={28} />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 dark:text-[#f3dde7]">
+              <h3 className="font-headline-sm text-slate-900 dark:text-[#f3dde7]">
                 Delete Student?
               </h3>
               <p className="text-sm text-slate-500 dark:text-on-surface-variant mt-2 mb-8 leading-relaxed">

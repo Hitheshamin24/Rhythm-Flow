@@ -17,7 +17,7 @@ const DashboardPage = () => {
   } = useDashboard();
 
   return (    // Applied Warm Background: bg-[#FFFBF7] matches the image's cream background
-    <div className="space-y-8 pb-10 bg-[#FFFBF7] dark:bg-[#1b1017] min-h-screen p-6 md:p-8 font-sans text-stone-800 dark:text-[#f3dde7]">
+    <div className="space-y-8 pb-10 bg-[#FFFBF7] dark:bg-[#1b1017] min-h-screen p-6 md:p-8 text-stone-800 dark:text-[#f3dde7]">
       {/* Header */}
    
 
@@ -75,7 +75,7 @@ const DashboardPage = () => {
         <div className="lg:col-span-2 bg-white dark:bg-surface-container-low rounded-3xl p-6 md:p-8 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.05)] border border-stone-100 dark:border-outline-variant/20 relative overflow-hidden group">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h2 className="text-xl font-bold font-serif dark:font-sans text-[#2C1810] dark:text-[#f3dde7] flex items-center gap-2">
+              <h2 className="font-headline-sm text-[#2C1810] dark:text-[#f3dde7] flex items-center gap-2">
                 Weekly Attendance
               </h2>
             </div>
@@ -131,7 +131,7 @@ const DashboardPage = () => {
         <div className="bg-white dark:bg-surface-container-low rounded-3xl p-6 md:p-8 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.05)] border border-stone-100 dark:border-outline-variant/20 flex flex-col justify-between">
           <div className="flex justify-between items-start mb-6">
             <div>
-              <h2 className="text-xl font-bold font-serif dark:font-sans text-[#2C1810] dark:text-[#f3dde7]">Finances</h2>
+              <h2 className="font-headline-sm text-[#2C1810] dark:text-[#f3dde7]">Finances</h2>
               <p className="text-xs text-stone-400 dark:text-on-surface-variant font-bold uppercase tracking-wider mt-1">
                 Collection Rate
               </p>
@@ -192,7 +192,7 @@ const DashboardPage = () => {
         {/* Recent Payments */}
         <div className="bg-white dark:bg-surface-container-low rounded-3xl p-6 md:p-8 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.05)] border border-stone-100 dark:border-outline-variant/20">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-xl font-bold font-serif dark:font-sans text-[#2C1810] dark:text-[#f3dde7] flex items-center gap-2">
+            <h2 className="font-headline-sm text-[#2C1810] dark:text-[#f3dde7] flex items-center gap-2">
               Recent Payments
             </h2>
             <ArrowUpRight
@@ -248,7 +248,7 @@ const DashboardPage = () => {
         {/* Today's Schedule */}
         <div className="bg-white dark:bg-surface-container-low rounded-3xl p-6 md:p-8 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.05)] border border-stone-100 dark:border-outline-variant/20">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-xl font-bold font-serif dark:font-sans text-[#2C1810] dark:text-[#f3dde7] flex items-center gap-2">
+            <h2 className="font-headline-sm text-[#2C1810] dark:text-[#f3dde7] flex items-center gap-2">
               Today's Schedule
             </h2>
             <button className="text-xs font-bold text-stone-500 dark:text-on-surface-variant bg-stone-100 dark:bg-surface-container px-3 py-1.5 rounded-lg hover:bg-stone-200 dark:hover:bg-surface-container-high transition-colors uppercase tracking-wide">

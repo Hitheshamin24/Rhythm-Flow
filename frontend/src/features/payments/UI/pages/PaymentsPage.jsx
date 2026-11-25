@@ -42,7 +42,7 @@ const PaymentsPage = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800 dark:text-[#f3dde7]">Fee Payments</h2>
+          <h2 className="font-headline-lg text-slate-800 dark:text-[#f3dde7]">Fee Payments</h2>
           <p className="text-sm text-slate-500 dark:text-[#e0bec6] mt-1">
             Track monthly fee status per month.
           </p>
